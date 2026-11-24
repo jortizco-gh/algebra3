@@ -1,0 +1,2030 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Balanzas algebraicas</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚖️</text></svg>">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<style>
+:root{--es:#00a083;--li:#afcb37;--tu:#00a4b7;--gr:#3b3b3d;--esL:#e2f4f0;--liL:#f2f7d9;--tuL:#dff3f6;--bg:#f5f8f8;--line:#cfdcdc}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;color:var(--gr);background:var(--bg);line-height:1.4;font-size:1rem}
+header{background:var(--gr);color:#fff;padding:8px 16px;border-bottom:6px solid var(--es);border-image:linear-gradient(90deg,#00a083,#afcb37,#00a4b7) 1}
+header h1{margin:0;font-size:1.3rem}
+.hd{display:flex;gap:10px;justify-content:space-between;align-items:center;flex-wrap:wrap}
+.hr{display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:.95rem}
+main{max-width:1280px;margin:0 auto;padding:10px 14px 30px}
+.card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin:10px 0;box-shadow:0 1px 3px rgba(59,59,61,.08)}
+button{font:inherit;font-weight:700;cursor:pointer;border:2px solid var(--gr);border-radius:9px;padding:7px 14px;background:var(--li);color:var(--gr)}
+button:hover:not(:disabled){box-shadow:0 0 0 3px var(--tu)}
+button:disabled{opacity:.5;cursor:not-allowed}
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,.tok:focus-visible{outline:3px solid var(--tu);outline-offset:2px}
+button.ghost{background:#fff;border-color:var(--es)}
+button.light{background:transparent;color:#fff;border:2px solid #fff;padding:5px 10px}
+button.lang{background:#fff;color:var(--gr);border:2px solid var(--li);padding:6px 12px}
+input[type=text],input[type=number],select,textarea{font:inherit;color:var(--gr);background:#fff;border:2px solid var(--tu);border-radius:8px;padding:7px 10px;min-width:0}
+textarea{width:100%;resize:vertical}
+input:disabled,textarea:disabled{background:#eef2f2}
+input[type=checkbox]{width:1.15em;height:1.15em;accent-color:var(--es)}
+input[type=range]{accent-color:var(--es);width:130px;min-width:110px}
+label{font-weight:600}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;position:sticky;top:0;z-index:5;background:var(--bg);padding:6px 0}
+.tab{background:#fff;color:var(--gr);border:2px solid var(--tu);font-size:.95rem;padding:6px 10px}
+.tab.on{background:var(--gr);color:#fff;border-color:var(--gr);box-shadow:inset 0 -6px 0 var(--li)}
+.toolbar{display:flex;gap:10px 16px;flex-wrap:wrap;align-items:center}
+.toolbar label{display:flex;gap:6px;align-items:center}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:8px 0}
+.row.col{display:block}
+.row input[type=text]{flex:1;min-width:10em;font-size:1.1rem}
+.mission{background:var(--tuL);border:1px solid var(--tu);border-left:8px solid var(--tu);font-weight:600}
+.exgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,520px),1fr));gap:12px;align-items:start}
+.exgrid.one{grid-template-columns:1fr;max-width:860px;margin:0 auto}
+.ex{margin:0}
+.exn{margin:0 0 4px;font-size:1.05rem}
+.ex.locked{background:#fafcfc}
+.stage{background:#fff;border:2px solid var(--tuL);border-radius:14px;padding:4px;margin:6px 0}
+.stage svg{width:100%;height:auto;max-height:62vh;display:block}
+.stage svg.edit .item{cursor:grab}
+.stage svg .hl{filter:drop-shadow(0 0 5px #afcb37)}
+.stage svg .hl rect,.stage svg .hl ellipse{stroke:#afcb37;stroke-width:5}
+.stage svg .gh{opacity:.38;pointer-events:none}
+.stage svg .gh rect,.stage svg .gh ellipse{stroke-dasharray:5 4}
+.sr{position:absolute;left:-9999px}
+.fb{border-radius:10px;padding:8px 12px;margin:8px 0;font-weight:600;border:2px solid var(--gr);background:#fff}
+.fb.ok{background:var(--esL);border-color:var(--es)}
+.fb.warn{background:var(--liL);border-color:var(--li)}
+.fb.bad{background:#fff;border-color:var(--gr);border-left-width:9px}
+.fb.q{background:var(--tuL);border-color:var(--tu)}
+.shelf{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:6px 0}
+.tok{display:flex;flex-direction:column;align-items:center;gap:2px;padding:4px 10px;border:2px dashed var(--tu);border-radius:10px;background:#fff;cursor:grab;user-select:none;-webkit-user-select:none;touch-action:none;font-size:.85rem;font-weight:600}
+.tok:hover{background:var(--tuL)}
+.ex.locked .tok{pointer-events:none;opacity:.5}
+.wwrap{display:flex;gap:8px;align-items:center;font-size:.9rem;font-weight:600;background:var(--liL);border:1px solid var(--li);border-radius:10px;padding:4px 10px}
+.wval{font-weight:800;font-size:1.1rem;min-width:1.6em;text-align:center}
+.target{margin:2px 0}
+.eqbig{font-size:1.2rem;font-weight:700;line-height:1.9;font-variant-numeric:tabular-nums}
+.solview{background:var(--liL);border:1px solid var(--li);border-radius:10px;padding:6px 10px;margin-top:8px}
+mark.chg{background:var(--li);color:var(--gr);padding:0 5px;border-radius:5px;font-weight:800}
+.opx{background:var(--tuL);border:2px solid var(--tu);border-radius:7px;padding:0 6px;font-weight:800;white-space:nowrap}
+.arr{color:var(--es);font-weight:800}
+.log{background:#fff;border:1px solid var(--line);border-radius:10px;padding:2px 10px;margin-top:6px;max-height:300px;overflow:auto}
+.step{padding:6px 0;border-bottom:1px dashed var(--line)}
+.step:last-child{border-bottom:0}
+.stepT{font-weight:600}
+.stepE{margin-top:2px;font-size:1.08rem;line-height:1.9;font-variant-numeric:tabular-nums}
+.linedesc{font-size:.9rem;font-weight:600;color:#5a5a5c}
+.goal{background:var(--esL);border:1px solid var(--es);border-radius:9px;padding:4px 10px;display:inline-block;font-size:.92rem;font-weight:600;margin:4px 0}
+.vrow{background:var(--esL);border:1px solid var(--es);border-radius:10px;padding:6px 10px}
+.vrow input{width:6em;font-size:1.1rem}
+.sendbox{display:flex;gap:12px;align-items:center;flex-wrap:wrap;justify-content:center}
+.sendbox button{font-size:1.15rem;padding:10px 26px}
+.sendbox .fb{margin:0}
+.rstat{background:var(--esL);border:1px solid var(--es);border-radius:10px;padding:8px 12px;margin:8px 0;line-height:1.6}
+.rq{display:flex;flex-direction:column;gap:4px;flex:1;min-width:14em}
+.ghostobj{position:fixed;z-index:50;pointer-events:none;opacity:.92;transform:translate(-50%,-50%);filter:drop-shadow(0 5px 6px rgba(0,0,0,.35))}
+.dz{fill:rgba(175,203,55,.2);stroke:#00a083;stroke-width:3;stroke-dasharray:8 6;pointer-events:none}
+body.dragging,body.dragging *{cursor:grabbing!important}
+#syncbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:6px;padding-top:5px;border-top:1px solid rgba(255,255,255,.35);font-size:.9rem}
+#login{max-width:620px;margin:18px auto}
+#login h2{margin:.1em 0 .3em}
+.fgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px;margin:10px 0}
+.fgrid label{display:flex;flex-direction:column;gap:3px}
+.fgrid input,.fgrid select{font-size:1.1rem;width:100%}
+.mailrow{display:flex;align-items:center;gap:6px}
+.mailrow input{flex:1}
+.dom{font-weight:700;white-space:nowrap}
+.priv{background:var(--tuL);border:1px solid var(--tu);border-radius:8px;padding:8px 12px;font-size:.93rem;margin:8px 0}
+.chkrow{display:flex;gap:8px;align-items:center;margin:8px 0}
+#lgGo{font-size:1.1rem;padding:10px 24px}
+#lgSkip{margin-left:10px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+.sub{margin:.1em 0 .6em;font-size:1.05rem;font-weight:600;color:#5a5a5c}
+.katex{font-size:1.06em}
+.frac{display:inline-flex;flex-direction:column;align-items:center;justify-content:center;vertical-align:middle;text-align:center;font-size:.9em;line-height:1.12;margin:-.15em .22em}
+.frac .fn{border-bottom:2px solid currentColor;padding:0 .28em .08em;width:100%}
+.frac .fd{padding:.08em .28em 0;width:100%}
+.wex{border:1px solid var(--line);border-radius:12px;padding:8px 14px;margin:10px 0;background:#fff}
+.wex h3{margin:.1em 0 .35em;font-size:1.06rem}
+.wex .idea{background:var(--tuL);border-left:7px solid var(--tu);border-radius:8px;padding:6px 10px;margin:6px 0;font-weight:600}
+.wex .ok{background:var(--esL);border:1px solid var(--es);border-radius:8px;padding:5px 10px;display:inline-block;margin-top:4px;font-weight:600}
+.wtab{border-collapse:collapse;margin:8px 0 4px;font-size:1.14rem}
+.wtab td{padding:5px 2px;vertical-align:middle;line-height:1.9}
+.wtab td.eqc{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+.wtab td.eqs{text-align:center;padding:0 7px}
+.wtab td.eqr{text-align:left;white-space:nowrap;font-variant-numeric:tabular-nums}
+.wtab td.opc{text-align:left;padding-left:16px}
+.tok input{width:3.3em;font-size:.95rem;padding:2px 4px;text-align:center;border-width:2px;margin-top:2px}
+.tok{cursor:default}
+.tok .grab{cursor:grab}
+.cmp{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,290px),1fr));gap:10px;margin:6px 0}
+.cmp>div{border:1px solid var(--line);border-radius:10px;padding:6px 10px}
+.cmp h4{margin:.1em 0 .3em;font-size:.95rem;text-transform:uppercase;letter-spacing:.03em;color:#5a5a5c}
+.cmp .bal0{background:var(--tuL)}
+.cmp .sho{background:var(--liL)}
+.rule{background:var(--esL);border:1px solid var(--es);border-radius:9px;padding:6px 10px;margin:6px 0;font-weight:600}
+.mv{background:var(--li);border-radius:5px;padding:0 5px;font-weight:800}
+#landing{max-width:920px;margin:28px auto;text-align:center}
+.algebra-banner{--c-emerald:#00a083;--c-lime:#afcb37;--c-cyan:#00a4b7;--c-dark:#3b3b3d;position:relative;width:100%;max-width:920px;aspect-ratio:920/300;margin:0 auto;background:#fff;border:2px solid rgba(59,59,61,.15);border-radius:24px;box-sizing:border-box;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:"Nimbus Sans","Helvetica Neue",Arial,sans-serif;font-weight:700;user-select:none;overflow:hidden}
+.algebra-word{display:flex;align-items:baseline;justify-content:center;gap:.06em;font-size:clamp(2.4rem,11vw,7.6rem);line-height:1;letter-spacing:.02em;margin-bottom:14px;animation:color-shift 4s ease-in-out infinite}
+.char-stack{display:inline-grid;place-items:center}
+.char-stack>span{grid-area:1/1;text-align:center}
+.layer-es{color:var(--c-emerald);animation:fade-es 4s ease-in-out infinite}
+.layer-eu{color:var(--c-cyan);animation:fade-eu 4s ease-in-out infinite}
+.progress-track{position:absolute;bottom:9%;width:26%;min-width:130px;max-width:240px;height:6px;background:rgba(59,59,61,.14);border-radius:999px;overflow:hidden}
+.progress-pill{width:53%;height:100%;border-radius:999px;animation:pill-slide 4s ease-in-out infinite}
+@keyframes color-shift{0%,34%,100%{color:var(--c-emerald)}50%,84%{color:var(--c-cyan)}}
+@keyframes fade-es{0%,34%,100%{opacity:1;z-index:2}50%,84%{opacity:.24;z-index:1}}
+@keyframes fade-eu{0%,34%,100%{opacity:.24;z-index:1}50%,84%{opacity:1;z-index:2}}
+@keyframes pill-slide{0%,34%,100%{transform:translateX(0%);background-color:var(--c-emerald)}42%,92%{background-color:var(--c-lime)}50%,84%{transform:translateX(88.6%);background-color:var(--c-cyan)}}
+.landbtns{display:flex;gap:18px;justify-content:center;flex-wrap:wrap;margin:26px 0 12px}
+.landbtns button{font-size:1.5rem;padding:16px 38px;border-radius:16px;min-width:220px;border:3px solid var(--gr)}
+#goEs{background:var(--es);color:#fff}
+#goEu{background:var(--tu);color:#fff}
+.landbtns button:hover{box-shadow:0 0 0 5px var(--li)}
+@media (prefers-reduced-motion:reduce){.layer-eu{display:none}.algebra-word,.layer-es,.progress-pill{animation:none!important}}
+/* ---- informe PDF (impresion) ---- */
+#report{display:none}
+.rep-h h1{margin:0 0 4px;font-size:1.4rem}
+.rep-ex{border:1px solid #cfdcdc;border-radius:8px;padding:6px 10px;margin:8px 0;break-inside:avoid}
+.rep-ex h4{margin:0 0 4px}
+.rep-res{font-weight:700;color:#00a083}
+.rep-svg svg{width:8cm;height:auto}
+#report h2{margin:14px 0 4px;break-after:avoid}
+@media print{
+  @page{size:A4;margin:14mm}
+  body{background:#fff}
+  body>*:not(#report){display:none!important}
+  #report{display:block}
+  #report *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .wex{break-inside:avoid}
+}
+</style>
+</head>
+<body>
+<header id="hdr" hidden>
+  <div class="hd">
+    <h1>&#9878;&#65039; <span data-i18n="title"></span></h1>
+    <div class="hr">
+      <button id="langBtn" type="button" class="lang"></button>
+      <span id="who" hidden></span>
+      <button id="logout" type="button" class="light" hidden data-i18n="btn_logout"></button>
+    </div>
+  </div>
+  <div id="syncbar" hidden>
+    <span id="syncTxt" aria-live="polite"></span>
+    <button id="retry" type="button" class="light" hidden data-i18n="btn_retry"></button>
+  </div>
+</header>
+<main>
+  <section id="landing" aria-label="ALGEBRA">
+    <div class="algebra-banner" role="img" aria-label="ÁLGEBRA / ALJEBRA">
+      <div class="algebra-word" aria-hidden="true">
+        <span class="char-stack"><span>A</span><span class="layer-es">Á</span></span>
+        <span>L</span>
+        <span class="char-stack"><span class="layer-es">G</span><span class="layer-eu">J</span></span>
+        <span>E</span><span>B</span><span>R</span><span>A</span>
+      </div>
+      <div class="progress-track" aria-hidden="true"><div class="progress-pill"></div></div>
+    </div>
+    <div class="landbtns">
+      <button id="goEs" type="button" lang="es">Castellano</button>
+      <button id="goEu" type="button" lang="eu">Euskara</button>
+    </div>
+  </section>
+  <section class="card" id="login" hidden>
+    <h2 data-i18n="lg_title"></h2>
+    <form id="lgForm" novalidate>
+      <div class="fgrid">
+        <label><span data-i18n="f_ap"></span><input id="lgAp" type="text" autocomplete="family-name" maxlength="40"></label>
+        <label><span data-i18n="f_nom"></span><input id="lgNom" type="text" autocomplete="given-name" maxlength="40"></label>
+        <label><span data-i18n="f_grp"></span><select id="lgGrp"></select></label>
+        <label><span data-i18n="f_mail"></span>
+          <span class="mailrow"><input id="lgMail" type="text" autocomplete="off" autocapitalize="none" spellcheck="false" maxlength="40"><span class="dom" id="lgDom"></span></span>
+        </label>
+      </div>
+      <div class="priv" id="privBox" hidden></div>
+      <label class="chkrow" id="lgChkRow"><input type="checkbox" id="lgChk"> <span data-i18n="priv_chk"></span></label>
+      <div class="fb bad" id="lgErr" role="alert" hidden></div>
+      <button type="submit" id="lgGo" data-i18n="btn_start"></button>
+      <button type="button" id="lgSkip" class="ghost" data-i18n="btn_skip"></button>
+    </form>
+  </section>
+  <div id="app" hidden>
+    <div class="tabs" id="tabs"></div>
+    <div id="panes"></div>
+  </div>
+</main>
+<div id="report"></div>
+<script>
+/* ============================================================
+   CONFIGURACION (la rellena el profesorado antes de repartir)
+   ENDPOINT vacio = modo practica: no se envia nada al servidor
+     (el registro y las notas se guardan igualmente en el
+     dispositivo y el alumno puede descargar su CSV).
+   ENDPOINT = URL .../exec del Apps Script de la hoja de calculo.
+   DEV true = muestra el boton "entrar sin datos" (pruebas).
+   APUNTES false = oculta las pestañas "Papel y boli" y "El atajo"
+     hasta la puesta en comun (principio de SIN ADELANTOS).
+   ============================================================ */
+const CONFIG={
+  ENDPOINT:"",
+  TOKEN:"mates3eso2026",
+  CORREO:"@educacion.navarra.es",
+  DEV:true,
+  APUNTES:true
+};
+const GRUPOS={es:['3ºA','3ºB','3ºC','3ºD'],eu:['3.H','3.I','3.J']};
+const I18N={
+es:{
+title:"Balanzas algebraicas",
+lang_btn:"Euskara",lang_title:"Cambiar a euskera",
+lg_title:"¿Quién eres?",
+f_ap:"Primer apellido",f_nom:"Nombre",f_grp:"Grupo",grp_ph:"Elige tu grupo",f_mail:"Identificación personal",
+priv:"<b>Qué se envía:</b> tu primer apellido, nombre, grupo y correo, y lo que haces en la balanza (ecuaciones que escribes, comprobaciones y retos que resuelves) y las notas que escribas en «Mis notas».<br><b>Para qué:</b> para que tu profesor o profesora vea cómo trabajas y pueda ayudarte.<br><b>Qué no se envía:</b> nada más de tu dispositivo.",
+priv_chk:"He leído esta información",btn_start:"Empezar",btn_skip:"⏭ Entrar sin datos (modo prueba)",
+v_ap:"Escribe tu primer apellido (solo letras).",v_nom:"Escribe tu nombre (solo letras).",
+v_grp:"Elige tu grupo.",v_mail:"Escribe tu identificación personal (sin @ ni espacios).",
+v_chk:"Marca que has leído la información.",
+who:"👤 {0}, {1} · {2}",btn_logout:"Cerrar sesión",
+s_sending:"⏳ Enviando…",s_ok:"✔ Enviado a tu profesor/a",s_unconf:"✔ Enviado (sin confirmación)",
+s_pending:"⚠ {0} sin enviar",s_rej:"⚠ El envío fue rechazado. Avisa a tu profesor/a.",btn_retry:"Reintentar",
+t_r1:"🏆 Reto 1",s_r1:"los gigas del verano",
+t_r2:"🏆 Reto 2",s_r2:"abono o tarjeta",
+t1:"① Traduce",s1:"de la balanza a la ecuación",
+t2:"② Construye",s2:"de la ecuación a la balanza",
+t3:"③ Resuelve",s3:"¿qué hay dentro de cada saco?",
+t4:"④ Papel y boli",s4:"cuatro ejemplos resueltos con el método de la balanza",
+t5:"⑤ El atajo",s5:"de la balanza a la regla de toda la vida",
+t6:"⑥ Práctica libre",s6:"elige actividad, nivel y contenido del saco",
+sh_intro:"En la balanza siempre hacemos lo mismo en los dos platos. Si te fijas en el resultado, parece que el número «salta» al otro lado cambiando de signo. Es el mismo movimiento, contado en corto.",
+sh_bal:"Con la balanza",sh_sho:"El atajo",sh_why:"¿Por qué?",
+sh_t1:"Lo que está sumando pasa restando",
+sh_t2:"Lo que está restando pasa sumando",
+sh_t3:"Lo que está multiplicando pasa dividiendo",
+sh_t4:"Lo que está dividiendo pasa multiplicando",
+sh_r1:"El <b>+ 11</b> del primer miembro aparece como <b>− 11</b> en el segundo.",
+sh_r2:"El <b>− 7</b> del primer miembro aparece como <b>+ 7</b> en el segundo.",
+sh_r3:"El <b>· 4</b> que acompaña a la x aparece <b>dividiendo</b> en el segundo miembro.",
+sh_r4:"El <b>÷ 5</b> que afecta a la x aparece <b>multiplicando</b> en el segundo miembro.",
+sh_w1:"Quitar 11 pesas de los dos platos deja el plato izquierdo con la caja sola y el derecho con 11 pesas menos.",
+sh_w2:"Añadir 7 pesas a los dos platos deja la caja sola a la izquierda y 7 pesas más a la derecha.",
+sh_w3:"Si reparto los dos platos en 4 grupos iguales, a la izquierda queda 1 caja y a la derecha la cuarta parte.",
+sh_w4:"Si quintuplico los dos platos, a la izquierda se completa la caja y a la derecha hay cinco veces más.",
+sh_warn:"El atajo solo vale si haces lo mismo en los dos miembros. Si dudas, vuelve a la balanza: nunca falla.",
+pb_intro:"Mira cómo se resuelve cada ecuación paso a paso. Fíjate en que todo lo que se hace en un miembro se hace también en el otro: así la balanza sigue equilibrada.",
+pb_t1:"Sumar lo mismo en los dos miembros",pb_t2:"Restar lo mismo en los dos miembros",
+pb_t3:"Multiplicar los dos miembros",pb_t4:"Dividir los dos miembros",
+pb_i1:"En el plato izquierdo hay la caja x y 7 globos. Para dejar sola la caja, <b>añado 7 pesas a cada plato</b>.",
+pb_i2:"En el plato izquierdo hay la caja x y 11 pesas. Quiero dejar sola la caja → <b>quito 11 pesas de cada plato</b>.",
+pb_i3:"En el plato izquierdo solo hay <i>un quinto</i> de la caja. <b>Multiplico los dos platos por 5</b> para tener la caja completa.",
+pb_i4:"Hay 4 cajas iguales en un plato. Si <b>divido cada plato entre 4</b>, me queda 1 caja.",
+pb_opadd:"sumo {0} a los dos miembros",pb_opsub:"resto {0} a los dos miembros",
+pb_opmul:"multiplico los dos miembros por {0}",pb_opdiv:"divido los dos miembros entre {0}",
+pb_ch:"Comprobación:",
+pb_tip:"Para escribir una fracción usa la barra: <b>x/5</b>, <b>(x+2)/3</b>. En pantalla se verá como fracción, con el denominador debajo.",
+ac1:"Traduce",ac2:"Construye",ac3:"Resuelve con objetos",ac4:"Papel y boli (resolver escribiendo)",act:"Actividad",
+lvl:"Nivel",lv1:"1 · quitar lo que sobra",lv2:"2 · repartir o duplicar los platos",lv3:"3 · dos movimientos",lv4:"4 · sacos en los dos platos",
+sol:"Dentro del saco",so_mix:"Mezcla: pesas, globos o vacío",so_pos:"Solo pesas",so_zero:"Vacío",so_neg:"Solo globos",
+btn_new:"🎲 Nuevo ejercicio",
+m1:"Mira cada balanza y escribe con símbolos lo que ves.",
+m2:"Construye cada balanza arrastrando sacos, pesas y globos hasta los platillos.",
+m3:"Averigua qué hay dentro de cada saco. Arrastra un objeto a la balanza: se añade en los dos platillos. Para quitarlo, arrástralo fuera. Puedes cambiar el peso de las pesas y los globos.",
+m4:"Resuelve cada ecuación escribiendo las líneas, como en la balanza: lo que haces en un miembro, hazlo también en el otro.",
+ex_n:"Ejercicio {0}",ex_sol:"Solución:",
+q1_lbl:"Ecuación de la balanza",q1_ph:"por ejemplo: 2x + 3 = 11",btn_check:"Comprobar",
+btn_clr:"Vaciar los platillos",btn_undo:"↩ Deshacer",btn_reset:"⟲ Empezar de nuevo",
+btn_send:"Enviar respuestas",
+send_missing:"Te faltan por terminar: {0}. Pulsa otra vez para enviar igualmente.",
+send_ok:"✔ Respuestas enviadas",send_practice:"Modo práctica: no se ha enviado nada.",
+send_fail:"No se ha podido enviar. Vuelve a pulsar o avisa a tu profesor/a.",
+shelf:"Almacén:",w_lbl:"Peso de pesas y globos:",w_hint:"Cambia el número de la casilla y el objeto cambia de valor.",
+tk_b:"saco x",tk_nb:"saco −x",tk_u:"pesa",tk_g:"globo",
+n_b:"saco (x)",n_nb:"saco negativo (−x)",n_u:"pesa de {0}",n_g:"globo de −{0}",
+o_b:"1 saco (x)",o_nb:"1 saco negativo (−x)",o_u:"1 pesa de {0}",o_g:"1 globo de −{0}",
+nb1:"saco",nbN:"sacos",nnb1:"saco negativo",nnbN:"sacos negativos",nu1:"pesa",nuN:"pesas",ng1:"globo",ngN:"globos",
+aria_L:"Platillo izquierdo",aria_R:"Platillo derecho",empty:"vacío",a_w:"peso {0}",
+l_init:"Situación inicial",l_rm:"Quitamos {0} de cada platillo",l_add:"Añadimos {0} a cada platillo",
+f1_noletter:"Tu ecuación no tiene ninguna letra. ¿Cómo representas lo que hay dentro de los sacos?",
+f1_ok:"¡Eso es! Has traducido la balanza.",
+f1_equiv:"Esa ecuación tiene la misma solución que la balanza, pero no describe lo que hay en los platillos. ¿Qué hay exactamente en cada uno?",
+dg1_L1:"Tu primer miembro encaja con el platillo izquierdo. Mira el derecho: ¿cuántos sacos y cuánto peso hay?",
+dg1_R1:"Tu segundo miembro encaja con el platillo derecho. Mira el izquierdo: ¿cuántos sacos y cuánto peso hay?",
+dg1_L2:"Tu primer miembro encaja con el platillo derecho. ¿Qué hay en el otro platillo?",
+dg1_R2:"Tu segundo miembro encaja con el platillo izquierdo. ¿Qué hay en el otro platillo?",
+dg1_N:"Tu ecuación no coincide con la balanza. ¿Cuántos sacos y cuánto peso hay en cada platillo? ¿Aparece cada cantidad en tu ecuación?",
+dg2_L:"Tu platillo izquierdo coincide con la ecuación. ¿Y el derecho? ¿Cuántos sacos y cuánto peso lleva en la ecuación?",
+dg2_R:"Tu platillo derecho coincide con la ecuación. ¿Y el izquierdo? ¿Cuántos sacos y cuánto peso lleva en la ecuación?",
+dg2_N:"Tu balanza no coincide con la ecuación. ¿Qué número acompaña a la x en cada lado? ¿Qué número va solo?",
+e_num:"No entiendo el número «{0}».",e_pow:"Aquí solo hay primer grado: sin potencias.",e_sym:"No entiendo el símbolo «{0}».",
+e_empty:"Falta escribir uno de los dos lados de la ecuación.",e_mulvar:"Aquí solo hay primer grado: no multipliques letra por letra.",
+e_divvar:"No se puede dividir entre una letra en este nivel.",e_div0:"No se puede dividir entre 0.",
+e_end:"Parece que falta algo al final de la expresión.",e_paren:"Falta cerrar un paréntesis.",e_pos:"No entiendo «{0}» en esa posición.",
+e_noeq:"Una ecuación necesita el signo = entre los dos platillos.",e_twoeq:"Solo puede haber un signo =.",e_onevar:"Usa una sola letra para la cantidad desconocida.",
+f2_empty:"Los platillos están vacíos. ¿Qué dice la ecuación que hay que poner en cada uno?",
+f2_ok:"¡Balanza equilibrada y fiel a la ecuación!",
+f2_swap:"Has puesto los platillos al revés, pero la ecuación es la misma. ¿Por qué da igual?",
+f2_equiv:"La balanza se equilibra, pero no es la de la ecuación: tiene la misma solución, no los mismos platillos. ¿Qué lleva cada platillo en la ecuación? ¿Y en tu balanza?",
+note:"Una pesa y un globo en el mismo platillo se compensan. ¿Qué queda ahora en ese platillo?",
+maxb:"Ese platillo ya tiene 8 sacos, el máximo.",maxu:"En ese platillo no cabe más peso.",maxg:"En ese platillo no caben más globos.",
+drag_hint:"Arrastra este objeto hasta uno de los platillos.",
+er_u:"En los dos platillos no hay una pesa de {0} que quitar. ¿Qué otra cosa puedes hacer en los dos platillos?",
+er_g:"En los dos platillos no hay un globo de −{0} que quitar. ¿Qué otra cosa puedes hacer en los dos platillos?",
+er_b:"No hay un saco x en los dos platillos. ¿Qué platillo tiene menos?",
+er_nb:"No hay un saco −x en los dos platillos. ¿Qué podrías añadir en los dos?",
+er_b8:"Cada platillo admite hasta 8 sacos.",
+solved:"¡El saco está solo! ¿Qué lleva dentro?",
+solved_neg:"Tienes un saco −x solo. ¿Cuánto vale entonces x?",
+vf_pre:"Cada saco contiene",vf_post:"(+ pesas · − globos)",
+v_num:"Escribe un número.",v_txt:"{0}: platillo izquierdo = {1}, platillo derecho = {2}. ",
+v_ok:"¡Se equilibra!",v_bad:"No se equilibra. ¿Qué platillo pesa más? ¿Qué ha podido pasar en tus pasos?",
+cont_pos:"Con {0} en cada saco",cont_neg:"Con {0} en cada saco",cont_zero:"Con el saco vacío",cont_frac:"Con x = {0}",
+esc_goal:"Objetivo: dejar la x sola en un miembro. Primero sumo o resto; después multiplico o divido.",
+esc_next:"Escribe la línea siguiente:",esc_ph:"por ejemplo: x + 11 − 11 = 4 − 11",
+ac5:"El atajo (sin escribir el paso del medio)",
+sh_sub:"✔ El {0} ha pasado al otro miembro restando.",
+sh_add:"✔ El {0} ha pasado al otro miembro sumando.",
+sh_mul:"✔ El · {0} ha pasado al otro miembro dividiendo.",
+sh_div:"✔ El ÷ {0} ha pasado al otro miembro multiplicando.",
+sh_gen:"✔ Movimiento correcto: la igualdad se mantiene.",
+m5:"Resuelve con el atajo: salta directamente a la línea en la que el número ya ha pasado al otro miembro con el signo cambiado.",
+sh_goal:"Objetivo: dejar la x sola, pero escribiendo menos líneas que en la balanza.",
+sh_free:"Aquí no escribes el paso del medio: lo que suma pasa restando, lo que resta pasa sumando, lo que multiplica pasa dividiendo y lo que divide pasa multiplicando.",
+sh_next:"Escribe directamente el resultado del movimiento:",
+sh_try:"👉 Para practicarlo tú: ve a «Práctica libre» y elige la actividad «El atajo».",
+sh_ph:"por ejemplo: x = 4 − 11",btn_step:"Comprobar paso",
+esc_add:"✔ Has sumado {0} a los dos miembros.",esc_sub:"✔ Has restado {0} a los dos miembros.",
+esc_mul:"✔ Has multiplicado los dos miembros por {0}.",esc_div:"✔ Has dividido los dos miembros entre {0}.",
+esc_gen:"✔ Paso correcto: el equilibrio se mantiene.",
+esc_same:"Esa línea es igual que la anterior. ¿Qué te estorba para dejar la x sola?",
+esc_one:"Has cambiado solo un miembro. En la balanza, lo que haces en un platillo hay que hacerlo también en el otro.",
+esc_bad:"Ese paso rompe el equilibrio: la ecuación ya no tiene la misma solución. ¿Has hecho lo mismo en los dos miembros?",
+esc_novar:"En esa línea ha desaparecido la x. Vuelve a escribirla.",
+esc_neg:"Tienes −x sola. ¿Cuánto vale entonces x? Escribe una línea más con x.",
+esc_fin:"🎉 ¡Resuelto! x = {0}",esc_chk:"Comprobación: primer miembro = {0}; segundo miembro = {1}. ✔",
+r1_t:"Los gigas del verano",
+r1_txt:"En julio te quedas sin datos a mitad de mes y en casa decidís cambiar de tarifa. En la tienda os ponen dos planes sobre la mesa:<br>• <b>Plan GBmerke:</b> 15 € fijos al mes y 0,50 € por cada GB que gastes.<br>• <b>Plan QuotaFree:</b> ni un euro de cuota fija, pero 1,20 € por cada GB.<br>Tu hermana dice que QuotaFree es «gratis si no lo usas» y tú sospechas que con series y vídeos sale carísimo.<br><b>¿A partir de cuántos gigas al mes deja de interesar QuotaFree?</b>",
+r1_q1:"1) Llama x a los GB que gastas en un mes. Escribe la ecuación que iguala el precio de los dos planes:",
+r1_ph1:"por ejemplo: 15 + 0,5x = 1,2x",
+r1_q2:"2) ¿A partir de cuántos GB conviene el plan GBmerke?",
+r1_ph2:"un número de GB",
+r1_q3:"3) Explica con tus palabras qué plan le recomiendas a tu hermana y qué plan a ti:",
+r1_bad:"Esa ecuación no iguala los dos precios. Con x GB, ¿cuánto pagas en cada plan (cuota fija + consumo)?",
+r1_model:"15 + 0,50x = 1,20x → 15 = 0,70x → x ≈ 21,4 GB. Hasta 21 GB sale más barato QuotaFree; desde 22 GB en adelante, GBmerke.",
+r2_t:"Abono o tarjeta",
+r2_txt:"Tienes 15 años y vives en la Comarca de Pamplona. Para ir en villavesa puedes elegir entre:<br>• <b>Abono mensual joven:</b> 14,53 € al mes, con viajes sin límite.<br>• <b>Tarjeta monedero:</b> 0,51 € por viaje.<br><b>¿En qué situación conviene cada opción?</b>",
+r2_q1:"1) Llama x al número de viajes del mes. Escribe la ecuación que iguala el coste de las dos opciones:",
+r2_ph1:"por ejemplo: 0,51x = 14,53",
+r2_q2:"2) ¿A partir de cuántos viajes al mes conviene el abono?",
+r2_ph2:"un número de viajes",
+r2_q3:"3) Explica con tus palabras qué opción conviene en cada situación:",
+r2_bad:"Esa ecuación no iguala los dos costes. Con x viajes, ¿cuánto pagas con el abono? ¿Y con la tarjeta?",
+r2_model:"14,53 = 0,51x → x = 14,53 : 0,51 ≈ 28,5 viajes. Con 28 viajes o menos sale mejor la tarjeta monedero; con 29 o más, el abono joven (y además es ilimitado).",
+rq_ok:"✔ ¡Eso es! Esa ecuación iguala las dos opciones. Su solución es x ≈ {0}.",
+rq_novar:"Falta la letra: ¿qué cantidad no conoces?",
+rn_ok:"✔ Correcto.",
+rn_near:"Casi: {0} es el punto de equilibrio exacto. Como se cuentan de uno en uno, ¿desde qué número entero conviene?",
+rn_prev:"Con ese número todavía conviene la otra opción. Prueba con el siguiente.",
+rn_bad:"No es ese número. Compara el coste de las dos opciones alrededor del punto de equilibrio.",
+r_note:"Tu explicación se guarda para tu profesor/a.",
+t7:"⑦ Mis notas",s7:"para tu futuro yo y para tu profesor/a",
+nt_intro:"Escribe con tus palabras lo que te llevas. Se guarda solo en este dispositivo. Para el PDF, elige «Guardar como PDF» en el diálogo de impresión.",
+nt_a:"Lo que he aprendido hoy (con mis palabras):",
+nt_b:"Lo que más me ha costado o un error que cometí:",
+nt_c:"Una pregunta que todavía me queda:",
+nt_apu:"Incluir los apuntes en el PDF (papel y boli + atajo)",
+nt_pdf:"📄 Descargar PDF",nt_csv:"⬇ Mis datos (CSV)",nt_send:"Enviar notas al profesor/a",
+rep_c:"✔ correcto",rep_e:"≈ equivalente",rep_i:"✘ incorrecto",rep_p:"sin responder",
+rep_resp:"Mi respuesta:",rep_obj:"Ecuación objetivo:",rep_mine:"Mi balanza:",
+rep_eq:"Ecuación:",rep_n:"Número:",rep_x:"Mi explicación:",rep_none:"Ningún ejercicio realizado.",
+x_unused:""
+},
+eu:{
+title:"Balantza aljebraikoak",
+lang_btn:"Castellano",lang_title:"Gaztelaniara aldatu",
+lg_title:"Nor zara?",
+f_ap:"Lehen abizena",f_nom:"Izena",f_grp:"Taldea",grp_ph:"Aukeratu zure taldea",f_mail:"Identifikazio pertsonala",
+priv:"<b>Zer bidaltzen da:</b> zure lehen abizena, izena, taldea eta posta elektronikoa, eta balantzan egiten duzuna (idazten dituzun ekuazioak, egiaztapenak eta ebazten dituzun erronkak) eta «Nire oharrak» atalean idazten dituzunak.<br><b>Zertarako:</b> zure irakasleak zure lana ikusteko eta lagundu ahal izateko.<br><b>Zer ez da bidaltzen:</b> zure gailuko beste ezer.",
+priv_chk:"Informazio hau irakurri dut",btn_start:"Hasi",btn_skip:"⏭ Daturik gabe sartu (proba modua)",
+v_ap:"Idatzi zure lehen abizena (letrak soilik).",v_nom:"Idatzi zure izena (letrak soilik).",
+v_grp:"Aukeratu zure taldea.",v_mail:"Idatzi zure identifikazio pertsonala (@ eta zuriunerik gabe).",
+v_chk:"Markatu informazioa irakurri duzula.",
+who:"👤 {0}, {1} · {2}",btn_logout:"Saioa itxi",
+s_sending:"⏳ Bidaltzen…",s_ok:"✔ Zure irakasleari bidali zaio",s_unconf:"✔ Bidalita (berrespenik gabe)",
+s_pending:"⚠ {0} bidali gabe",s_rej:"⚠ Bidalketa baztertu da. Esan zure irakasleari.",btn_retry:"Berriro saiatu",
+t_r1:"🏆 1. erronka",s_r1:"udako gigak",
+t_r2:"🏆 2. erronka",s_r2:"bonua ala txartela",
+t1:"① Itzuli",s1:"balantzatik ekuaziora",
+t2:"② Eraiki",s2:"ekuaziotik balantzara",
+t3:"③ Ebatzi",s3:"zer dago zaku bakoitzaren barruan?",
+t4:"④ Papera eta boligrafoa",s4:"lau ariketa ebatzita, balantzaren metodoarekin",
+t5:"⑤ Bide laburra",s5:"balantzatik betiko erregelara",
+t6:"⑥ Praktika librea",s6:"aukeratu jarduera, maila eta zakuaren edukia",
+sh_intro:"Balantzan beti gauza bera egiten dugu bi platerretan. Emaitzari erreparatzen badiozu, badirudi zenbakia beste aldera «saltatzen» duela, zeinua aldatuta. Mugimendu bera da, labur esanda.",
+sh_bal:"Balantzarekin",sh_sho:"Bide laburra",sh_why:"Zergatik?",
+sh_t1:"Batzen dagoena kentzen pasatzen da",
+sh_t2:"Kentzen dagoena batzen pasatzen da",
+sh_t3:"Biderkatzen dagoena zatitzen pasatzen da",
+sh_t4:"Zatitzen dagoena biderkatzen pasatzen da",
+sh_r1:"Lehen atalaren <b>+ 11</b> hori <b>− 11</b> gisa agertzen da bigarrenean.",
+sh_r2:"Lehen atalaren <b>− 7</b> hori <b>+ 7</b> gisa agertzen da bigarrenean.",
+sh_r3:"x-rekin doan <b>· 4</b> hori <b>zatitzen</b> agertzen da bigarren atalean.",
+sh_r4:"x-ri eragiten dion <b>÷ 5</b> hori <b>biderkatzen</b> agertzen da bigarren atalean.",
+sh_w1:"Bi platerretatik 11 pisu kentzean, ezkerrekoan kutxa bakarrik gelditzen da eta eskuinekoan 11 pisu gutxiago.",
+sh_w2:"Bi platerretan 7 pisu gehitzean, kutxa bakarrik gelditzen da ezkerrean eta 7 pisu gehiago eskuinean.",
+sh_w3:"Bi platerrak 4 talde berdinetan banatuz gero, ezkerrean kutxa 1 gelditzen da eta eskuinean laurdena.",
+sh_w4:"Bi platerrak bost halako eginez gero, ezkerrean kutxa osatzen da eta eskuinean bost halako dago.",
+sh_warn:"Bide laburra bi ataletan gauza bera egiten baduzu bakarrik balio du. Zalantzarik baduzu, itzuli balantzara: ez du huts egiten.",
+pb_intro:"Begiratu nola ebazten den ekuazio bakoitza urratsez urrats. Konturatu zaitez atal batean egiten den guztia bestean ere egiten dela: horrela balantzak orekatuta jarraitzen du.",
+pb_t1:"Gauza bera batu bi ataletan",pb_t2:"Gauza bera kendu bi ataletan",
+pb_t3:"Bi atalak biderkatu",pb_t4:"Bi atalak zatitu",
+pb_i1:"Ezkerreko platerrean x kutxa eta 7 puxika daude. Kutxa bakarrik uzteko, <b>7 pisu gehitzen dizkiot plater bakoitzari</b>.",
+pb_i2:"Ezkerreko platerrean x kutxa eta 11 pisu daude. Kutxa bakarrik utzi nahi dut → <b>11 pisu kentzen ditut plater bakoitzetik</b>.",
+pb_i3:"Ezkerreko platerrean kutxaren <i>bosten bat</i> baino ez dago. <b>Bi platerrak 5ez biderkatzen ditut</b> kutxa osoa izateko.",
+pb_i4:"Plater batean 4 kutxa berdin daude. <b>Plater bakoitza 4z zatitzen badut</b>, kutxa 1 gelditzen zait.",
+pb_opadd:"{0} batzen diet bi atalei",pb_opsub:"{0} kentzen diet bi atalei",
+pb_opmul:"bi atalak {0}ez biderkatzen ditut",pb_opdiv:"bi atalak {0}z zatitzen ditut",
+pb_ch:"Egiaztapena:",
+pb_tip:"Frakzio bat idazteko, erabili barra: <b>x/5</b>, <b>(x+2)/3</b>. Pantailan frakzio gisa ikusiko da, izendatzailea azpian.",
+ac1:"Itzuli",ac2:"Eraiki",ac3:"Ebatzi objektuekin",ac4:"Papera eta boligrafoa (idatziz ebatzi)",act:"Jarduera",
+lvl:"Maila",lv1:"1 · soberan dagoena kendu",lv2:"2 · platerak banatu edo biderkatu",lv3:"3 · bi mugimendu",lv4:"4 · zakuak bi platerretan",
+sol:"Zakuaren barruan",so_mix:"Nahasketa: pisuak, puxikak edo hutsik",so_pos:"Pisuak soilik",so_zero:"Hutsik",so_neg:"Puxikak soilik",
+btn_new:"🎲 Ariketa berria",
+m1:"Begiratu balantza bakoitzari eta idatzi ikurrekin ikusten duzuna.",
+m2:"Eraiki balantza bakoitza zakuak, pisuak eta puxikak platerretara arrastatuz.",
+m3:"Aurkitu zer dagoen zaku bakoitzaren barruan. Arrastatu objektu bat balantzara: bi platerretan gehitzen da. Kentzeko, arrastatu kanpora. Pisuen eta puxiken pisua alda dezakezu.",
+m4:"Ebatzi ekuazio bakoitza lerroz lerro idatziz, balantzan bezala: atal batean egiten duzuna, bestean ere egin.",
+ex_n:"{0}. ariketa",ex_sol:"Soluzioa:",
+q1_lbl:"Balantzaren ekuazioa",q1_ph:"adibidez: 2x + 3 = 11",btn_check:"Egiaztatu",
+btn_clr:"Hustu platerrak",btn_undo:"↩ Desegin",btn_reset:"⟲ Berriz hasi",
+btn_send:"Erantzunak bidali",
+send_missing:"Amaitzeke dituzu: {0}. Sakatu berriro hala ere bidaltzeko.",
+send_ok:"✔ Erantzunak bidali dira",send_practice:"Praktika modua: ez da ezer bidali.",
+send_fail:"Ezin izan da bidali. Sakatu berriro edo esan zure irakasleari.",
+shelf:"Biltegia:",w_lbl:"Pisuen eta puxiken pisua:",w_hint:"Aldatu laukitxoko zenbakia eta objektuaren balioa aldatuko da.",
+tk_b:"zakua x",tk_nb:"zakua −x",tk_u:"pisua",tk_g:"puxika",
+n_b:"zakua (x)",n_nb:"zaku negatiboa (−x)",n_u:"{0}(e)ko pisua",n_g:"−{0}(e)ko puxika",
+o_b:"zaku 1 (x)",o_nb:"zaku negatibo 1 (−x)",o_u:"{0}(e)ko pisu 1",o_g:"−{0}(e)ko puxika 1",
+nb1:"zaku",nbN:"zaku",nnb1:"zaku negatibo",nnbN:"zaku negatibo",nu1:"pisu",nuN:"pisu",ng1:"puxika",ngN:"puxika",
+aria_L:"Ezkerreko platerra",aria_R:"Eskuineko platerra",empty:"hutsik",a_w:"pisua {0}",
+l_init:"Hasierako egoera",l_rm:"Plater bakoitzetik kendu: {0}",l_add:"Plater bakoitzean gehitu: {0}",
+f1_noletter:"Zure ekuazioak ez du letrarik. Nola adierazten duzu zakuen barruan dagoena?",
+f1_ok:"Hori da! Balantza itzuli duzu.",
+f1_equiv:"Ekuazio horrek balantzak duen soluzio bera du, baina ez du platerretan dagoena deskribatzen. Zer dago zehazki bakoitzean?",
+dg1_L1:"Zure lehen atala ezkerreko platerrarekin bat dator. Begiratu eskuinekoari: zenbat zaku eta zenbat pisu daude?",
+dg1_R1:"Zure bigarren atala eskuineko platerrarekin bat dator. Begiratu ezkerrekoari: zenbat zaku eta zenbat pisu daude?",
+dg1_L2:"Zure lehen atala eskuineko platerrarekin bat dator. Zer dago beste platerrean?",
+dg1_R2:"Zure bigarren atala ezkerreko platerrarekin bat dator. Zer dago beste platerrean?",
+dg1_N:"Zure ekuazioa ez dator balantzarekin bat. Zenbat zaku eta zenbat pisu daude plater bakoitzean? Kopuru bakoitza agertzen da zure ekuazioan?",
+dg2_L:"Zure ezkerreko platerra ekuazioarekin bat dator. Eta eskuinekoa? Zenbat zaku eta zenbat pisu ditu ekuazioan?",
+dg2_R:"Zure eskuineko platerra ekuazioarekin bat dator. Eta ezkerrekoa? Zenbat zaku eta zenbat pisu ditu ekuazioan?",
+dg2_N:"Zure balantza ez dator ekuazioarekin bat. Zer zenbaki doa x-ren ondoan alde bakoitzean? Zein doa bakarrik?",
+e_num:"Ez dut ulertzen «{0}» zenbakia.",e_pow:"Hemen lehen mailako ekuazioak bakarrik daude: berreturarik ez.",e_sym:"Ez dut ulertzen «{0}» ikurra.",
+e_empty:"Ekuazioaren bi aldeetako bat idatzi gabe dago.",e_mulvar:"Hemen lehen maila soilik dago: ez biderkatu letra letrarekin.",
+e_divvar:"Maila honetan ezin da letra batez zatitu.",e_div0:"Ezin da 0z zatitu.",
+e_end:"Badirudi adierazpenaren amaieran zerbait falta dela.",e_paren:"Parentesi bat itxi gabe dago.",e_pos:"Ez dut ulertzen «{0}» toki horretan.",
+e_noeq:"Ekuazio batek = ikurra behar du bi platerren artean.",e_twoeq:"= ikur bat bakarrik egon daiteke.",e_onevar:"Erabili letra bakarra zenbaki ezezagunerako.",
+f2_empty:"Platerrak hutsik daude. Zer dio ekuazioak plater bakoitzean jarri behar dela?",
+f2_ok:"Balantza orekatuta dago eta ekuazioarekin bat dator!",
+f2_swap:"Platerrak alderantziz jarri dituzu, baina ekuazioa bera da. Zergatik da berdin?",
+f2_equiv:"Balantza orekatzen da, baina ez da ekuazioarena: soluzio bera du, ez plater berak. Zer darama plater bakoitzak ekuazioan? Eta zure balantzan?",
+note:"Pisu bat eta puxika bat plater berean elkar konpentsatzen dute. Zer gelditzen da orain plater horretan?",
+maxb:"Plater horrek 8 zaku ditu jada, gehienezkoa.",maxu:"Plater horretan ez da pisu gehiago sartzen.",maxg:"Plater horretan ez da puxika gehiago sartzen.",
+drag_hint:"Arrastatu objektu hau platerretako batera.",
+er_u:"Bi platerretan ez dago {0}(e)ko pisurik kentzeko. Zer beste gauza egin dezakezu bi platerretan?",
+er_g:"Bi platerretan ez dago −{0}(e)ko puxikarik kentzeko. Zer beste gauza egin dezakezu bi platerretan?",
+er_b:"Bi platerretan ez dago x zakurik. Zein platerrek ditu gutxiago?",
+er_nb:"Bi platerretan ez dago −x zakurik. Zer gehitu zenezake bietan?",
+er_b8:"Plater bakoitzak 8 zaku onartzen ditu gehienez.",
+solved:"Zakua bakarrik dago! Zer dauka barruan?",
+solved_neg:"−x zaku bat duzu bakarrik. Orduan, zenbat da x?",
+vf_pre:"Zaku bakoitzak dauka",vf_post:"(+ pisuak · − puxikak)",
+v_num:"Idatzi zenbaki bat.",v_txt:"{0}: ezkerreko platerra = {1}, eskuineko platerra = {2}. ",
+v_ok:"Orekatzen da!",v_bad:"Ez da orekatzen. Zein platerrek pisatzen du gehiago? Zer gertatu daiteke zure urratsetan?",
+cont_pos:"Zaku bakoitzean {0} izanda",cont_neg:"Zaku bakoitzean {0} izanda",cont_zero:"Zakua hutsik izanda",cont_frac:"x = {0} izanda",
+esc_goal:"Helburua: x bakarrik uztea atal batean. Lehenik batu edo kendu; gero biderkatu edo zatitu.",
+esc_next:"Idatzi hurrengo lerroa:",esc_ph:"adibidez: x + 11 − 11 = 4 − 11",
+ac5:"Bide laburra (erdiko urratsa idatzi gabe)",
+sh_sub:"✔ {0} hori beste atalera pasatu da kentzen.",
+sh_add:"✔ {0} hori beste atalera pasatu da batzen.",
+sh_mul:"✔ · {0} hori beste atalera pasatu da zatitzen.",
+sh_div:"✔ ÷ {0} hori beste atalera pasatu da biderkatzen.",
+sh_gen:"✔ Mugimendu zuzena: berdintza mantentzen da.",
+m5:"Ebatzi bide laburrarekin: salto egin zuzenean zenbakia beste atalera zeinua aldatuta pasatu den lerrora.",
+sh_goal:"Helburua: x bakarrik uztea, baina balantzan baino lerro gutxiago idatziz.",
+sh_free:"Hemen erdiko urratsa ez duzu idazten: batzen dagoena kentzen pasatzen da, kentzen dagoena batzen, biderkatzen dagoena zatitzen eta zatitzen dagoena biderkatzen.",
+sh_next:"Idatzi zuzenean mugimenduaren emaitza:",
+sh_try:"👉 Zuk praktikatzeko: joan «Praktika librera» eta aukeratu «Bide laburra» jarduera.",
+sh_ph:"adibidez: x = 4 − 11",btn_step:"Urratsa egiaztatu",
+esc_add:"✔ Bi atalei {0} gehitu diezu.",esc_sub:"✔ Bi atalei {0} kendu diezu.",
+esc_mul:"✔ Bi atalak {0}(e)z biderkatu dituzu.",esc_div:"✔ Bi atalak {0}(e)z zatitu dituzu.",
+esc_gen:"✔ Urrats zuzena: oreka mantentzen da.",
+esc_same:"Lerro hori aurrekoaren berdina da. Zer da oztopo x bakarrik uzteko?",
+esc_one:"Atal bakarra aldatu duzu. Balantzan, plater batean egiten duzuna bestean ere egin behar da.",
+esc_bad:"Urrats horrek oreka hausten du: ekuazioak ez du soluzio bera. Gauza bera egin duzu bi ataletan?",
+esc_novar:"Lerro horretan x desagertu da. Idatzi berriro.",
+esc_neg:"−x bakarrik duzu. Orduan, zenbat da x? Idatzi lerro bat gehiago x-rekin.",
+esc_fin:"🎉 Ebatzita! x = {0}",esc_chk:"Egiaztapena: lehen atala = {0}; bigarren atala = {1}. ✔",
+r1_t:"Udako gigak",
+r1_txt:"Uztailean hilabetearen erdian datu gabe gelditu zara eta etxean tarifa aldatzea erabaki duzue. Dendan bi plan jarri dizkizuete mahai gainean:<br>• <b>GBmerke plana:</b> 15 € finko hilean eta 0,50 € gastatzen duzun GB bakoitzeko.<br>• <b>QuotaFree plana:</b> kuota finkorik gabe, baina 1,20 € GB bakoitzeko.<br>Zure ahizpak dio QuotaFree «doan dela erabiltzen ez baduzu», eta zuk susmoa duzu telesail eta bideoekin oso garestia dela.<br><b>Zenbat gigatatik aurrera uzten dio QuotaFreek interesgarria izateari?</b>",
+r1_q1:"1) Deitu x hilabetean gastatzen dituzun GB-ei. Idatzi bi planen prezioa berdintzen duen ekuazioa:",
+r1_ph1:"adibidez: 15 + 0,5x = 1,2x",
+r1_q2:"2) Zenbat GB-tatik aurrera komeni da GBmerke plana?",
+r1_ph2:"GB kopuru bat",
+r1_q3:"3) Azaldu zure hitzetan zein plan gomendatzen diozun ahizpari eta zein zuretzat:",
+r1_bad:"Ekuazio horrek ez ditu bi prezioak berdintzen. x GB-rekin, zenbat ordaintzen duzu plan bakoitzean (kuota finkoa + kontsumoa)?",
+r1_model:"15 + 0,50x = 1,20x → 15 = 0,70x → x ≈ 21,4 GB. 21 GB arte QuotaFree merkeagoa da; 22 GB-tik aurrera, GBmerke.",
+r2_t:"Bonua ala txartela",
+r2_txt:"15 urte dituzu eta Iruñerrian bizi zara. Billabesan ibiltzeko, bi aukera hauetako bat hautatu dezakezu:<br>• <b>Gazteentzako hileko bonua:</b> 14,53 € hilean, nahi adina bidaia egiteko (mugarik gabe).<br>• <b>Txartel monederoa:</b> 0,51 € bidaia bakoitzeko.<br><b>Zein egoeratan da komenigarria aukera bakoitza?</b>",
+r2_q1:"1) Deitu x hilabeteko bidaia kopuruari. Idatzi bi aukeren kostua berdintzen duen ekuazioa:",
+r2_ph1:"adibidez: 0,51x = 14,53",
+r2_q2:"2) Zenbat bidaiatatik aurrera komeni da bonua?",
+r2_ph2:"bidaia kopuru bat",
+r2_q3:"3) Azaldu zure hitzetan zein aukera komeni den egoera bakoitzean:",
+r2_bad:"Ekuazio horrek ez ditu bi kostuak berdintzen. x bidaiarekin, zenbat ordaintzen duzu bonuarekin? Eta txartelarekin?",
+r2_model:"14,53 = 0,51x → x = 14,53 : 0,51 ≈ 28,5 bidaia. 28 bidaia edo gutxiagorekin txartel monederoa hobea da; 29 bidaiatik aurrera, gazte-bonua (gainera, mugarik gabe).",
+rq_ok:"✔ Hori da! Ekuazio horrek bi aukerak berdintzen ditu. Soluzioa x ≈ {0} da.",
+rq_novar:"Letra falta da: zein kopuru ez dakizu?",
+rn_ok:"✔ Zuzena.",
+rn_near:"Ia-ia: {0} da oreka-puntu zehatza. Banaka zenbatzen direnez, zein zenbaki osotik aurrera komeni da?",
+rn_prev:"Zenbaki horrekin beste aukera komeni da oraindik. Saiatu hurrengoarekin.",
+rn_bad:"Ez da zenbaki hori. Konparatu bi aukeren kostua oreka-puntuaren inguruan.",
+r_note:"Zure azalpena zure irakaslearentzat gordetzen da.",
+t7:"⑦ Nire oharrak",s7:"zure etorkizuneko zuretzat eta irakaslearentzat",
+nt_intro:"Idatzi zure hitzetan zer daramazun. Gailu honetan bakarrik gordetzen da. PDFrako, aukeratu «Gorde PDF gisa» inprimatzeko leihoan.",
+nt_a:"Gaur ikasi dudana (nire hitzetan):",
+nt_b:"Gehien kostatu zaidana edo egin dudan akatsa:",
+nt_c:"Oraindik daukadan galdera:",
+nt_apu:"Sartu apunteak PDFan (papera eta boligrafoa + bide laburra)",
+nt_pdf:"📄 PDFa deskargatu",nt_csv:"⬇ Nire datuak (CSV)",nt_send:"Oharrak irakasleari bidali",
+rep_c:"✔ zuzena",rep_e:"≈ baliokidea",rep_i:"✘ okerra",rep_p:"erantzun gabe",
+rep_resp:"Nire erantzuna:",rep_obj:"Helburuko ekuazioa:",rep_mine:"Nire balantza:",
+rep_eq:"Ekuazioa:",rep_n:"Zenbakia:",rep_x:"Nire azalpena:",rep_none:"Ez da ariketarik egin.",
+x_unused:""
+}
+};
+let L='es';
+function pl(n,k){const d=I18N[L];return n+' '+(n===1?d['n'+k+'1']:d['n'+k+'N']);}
+function tr(key,args,lang){
+  const d=I18N[lang||L]||I18N.es;let s=d[key];if(s===undefined)s=I18N.es[key];if(s===undefined)return key;
+  if(args)args.forEach((a,i)=>{
+    let v=a;
+    if(a&&typeof a==='object'){const dd=I18N[lang||L]||I18N.es;v=a.n+' '+(a.n===1?dd['n'+a.k+'1']:dd['n'+a.k+'N']);}
+    s=s.split('{'+i+'}').join(String(v));
+  });
+  return s;
+}
+/* ================= MATEMATICAS ================= */
+const EPS=1e-9,MINUS='−';
+function rng(seed){let a=(seed>>>0)||1;return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
+function ri(r,lo,hi){return lo+Math.floor(r()*(hi-lo+1));}
+function same(p,q){return Math.abs(p.a-q.a)<EPS&&Math.abs(p.b-q.b)<EPS;}
+function tokenize(s){
+  const tk=[];let i=0;
+  while(i<s.length){
+    const c=s[i];
+    if(/[0-9.]/.test(c)){let j=i;while(j<s.length&&/[0-9.]/.test(s[j]))j++;const t=s.slice(i,j);
+      if(!/^(\d+\.?\d*|\.\d+)$/.test(t))throw new Error(tr('e_num',[t]));
+      tk.push({t:'n',v:parseFloat(t)});i=j;continue;}
+    if(/\p{L}/u.test(c)){tk.push({t:'v',v:c.toLowerCase()});i++;continue;}
+    if('+-*/()'.includes(c)){tk.push({t:'o',v:c});i++;continue;}
+    if(c==='^')throw new Error(tr('e_pow'));
+    throw new Error(tr('e_sym',[c]));
+  }
+  return tk;
+}
+function mulLin(v,w){
+  if(Math.abs(v.a)>EPS&&Math.abs(w.a)>EPS)throw new Error(tr('e_mulvar'));
+  return{a:v.a*w.b+v.b*w.a,b:v.b*w.b};
+}
+function divLin(v,w){
+  if(Math.abs(w.a)>EPS)throw new Error(tr('e_divvar'));
+  if(Math.abs(w.b)<EPS)throw new Error(tr('e_div0'));
+  return{a:v.a/w.b,b:v.b/w.b};
+}
+function parseSide(tk,vars){
+  let p=0;
+  const startsFactor=k=>k&&(k.t==='n'||k.t==='v'||(k.t==='o'&&k.v==='('));
+  function expr(){
+    let v=term();
+    while(tk[p]&&tk[p].t==='o'&&(tk[p].v==='+'||tk[p].v==='-')){
+      const op=tk[p++].v;if(p>=tk.length)throw new Error(tr('e_end'));
+      const w=term();v=op==='+'?{a:v.a+w.a,b:v.b+w.b}:{a:v.a-w.a,b:v.b-w.b};
+    }
+    return v;
+  }
+  function term(){
+    let v=factor();
+    for(;;){
+      const k=tk[p];
+      if(k&&k.t==='o'&&(k.v==='*'||k.v==='/')){
+        p++;if(p>=tk.length)throw new Error(tr('e_end'));
+        const w=factor();v=k.v==='*'?mulLin(v,w):divLin(v,w);
+      }else if(startsFactor(k)){const w=factor();v=mulLin(v,w);}
+      else break;
+    }
+    return v;
+  }
+  function factor(){
+    const k=tk[p];
+    if(!k)throw new Error(tr('e_end'));
+    if(k.t==='o'&&(k.v==='+'||k.v==='-')){
+      p++;if(p>=tk.length)throw new Error(tr('e_end'));
+      const w=factor();return k.v==='-'?{a:-w.a,b:-w.b}:w;
+    }
+    if(k.t==='n'){p++;return{a:0,b:k.v};}
+    if(k.t==='v'){p++;vars.add(k.v);return{a:1,b:0};}
+    if(k.t==='o'&&k.v==='('){
+      p++;const v=expr();
+      if(!tk[p]||tk[p].v!==')')throw new Error(tr('e_paren'));
+      p++;return v;
+    }
+    throw new Error(tr('e_pos',[k.v]));
+  }
+  const v=expr();
+  if(p<tk.length)throw new Error(tr('e_pos',[tk[p].v]));
+  return v;
+}
+function parseEq(str){
+  let s=String(str||'').replace(/[−–—]/g,'-').replace(/[×·]/g,'*').replace(/[÷:]/g,'/').replace(/,/g,'.').replace(/\s+/g,'');
+  const parts=s.split('=');
+  if(parts.length!==2)throw new Error(tr(parts.length<2?'e_noeq':'e_twoeq'));
+  const vars=new Set(),sides=[];
+  for(const part of parts){
+    const tk=tokenize(part);
+    if(!tk.length)throw new Error(tr('e_empty'));
+    sides.push(parseSide(tk,vars));
+  }
+  if(vars.size>1)throw new Error(tr('e_onevar'));
+  return{L:sides[0],R:sides[1],vars};
+}
+function judge(e,tg){
+  if(same(e.L,tg.L)&&same(e.R,tg.R))return'exact';
+  if(same(e.L,tg.R)&&same(e.R,tg.L))return'swap';
+  const u1=e.L.a-e.R.a,v1=e.R.b-e.L.b,u2=tg.L.a-tg.R.a,v2=tg.R.b-tg.L.b;
+  if(Math.abs(u1)>EPS&&Math.abs(u2)>EPS&&Math.abs(v1*u2-v2*u1)<EPS)return'equiv';
+  return'no';
+}
+function diag(st,tg,ctx){
+  const l1=same(st.L,tg.L),r1=same(st.R,tg.R),l2=same(st.L,tg.R),r2=same(st.R,tg.L);
+  if(ctx===2){
+    if(l1&&!r1)return tr('dg2_L');
+    if(r1&&!l1)return tr('dg2_R');
+    return tr('dg2_N');
+  }
+  if(l1&&!r1)return tr('dg1_L1');
+  if(r1&&!l1)return tr('dg1_R1');
+  if(l2&&!r2)return tr('dg1_L2');
+  if(r2&&!l2)return tr('dg1_R2');
+  return tr('dg1_N');
+}
+/* --- generador de balanzas (modos 1-3): ax+b = cx+d --- */
+function genOK(level,a,b,c,d){
+  if(a<1||a>8||c<0||c>8||a===c)return false;
+  if(Math.abs(b)>20||Math.abs(d)>20||Math.abs(d-b)>20)return false;
+  if(level===1)return a===1&&c===0&&b>=1&&d>=0;
+  if(level===2)return a>=2&&a<=4&&c===0&&b>=1&&d>=0;
+  if(level===3)return c>=1&&c<=2&&a-c>=1&&a-c<=2&&b>=0&&d>=0;
+  return a<=4&&c<=2&&(b<0||d<0);
+}
+function solX(sol,r){
+  if(sol==='pos')return ri(r,1,6);
+  if(sol==='zero')return 0;
+  if(sol==='neg')return ri(r,-6,-1);
+  const u=r();
+  return u<0.45?ri(r,1,6):u<0.6?0:ri(r,-6,-1);
+}
+function gen(level,seed,sol){
+  sol=sol||'mix';
+  const si={mix:0,pos:1,zero:2,neg:3}[sol]||0;
+  const r=rng(seed*7919+level*104729+si*1299709);
+  for(let t=0;t<800;t++){
+    const x=solX(sol,r);let a,b,c;
+    if(level===1){a=1;c=0;b=ri(r,1,12);}
+    else if(level===2){a=ri(r,2,4);c=0;b=ri(r,1,12);}
+    else if(level===3){c=ri(r,1,2);a=c+ri(r,1,2);b=ri(r,0,12);}
+    else{a=ri(r,1,4);c=ri(r,0,2);b=ri(r,-10,10);}
+    const d=(a-c)*x+b;
+    if(genOK(level,a,b,c,d))return{a,b,c,d,x};
+  }
+  const x=sol==='neg'?-2:sol==='zero'?0:3,b=level===4?-5:5;
+  return{a:1,b,c:0,d:x+b,x};
+}
+/* --- generador para resolver escribiendo --- */
+function genW(level,seed){
+  const r=rng(seed*6151+level*53173);
+  const nz=(lo,hi)=>{let v=0;for(let i=0;i<40&&v===0;i++)v=ri(r,lo,hi);return v||3;};
+  if(level===1){const x=nz(-10,10),b=nz(-12,12);return{L:{x:1,c:b},R:{x:0,c:x+b},X:x};}
+  if(level===2){
+    if(r()<0.5){const a=ri(r,2,6),x=nz(-8,8);return{L:{x:a,c:0},R:{x:0,c:a*x},X:x};}
+    const n=ri(r,2,5),d=nz(-8,8);return{L:{x:1/n,c:0},R:{x:0,c:d},X:n*d};
+  }
+  if(level===3){
+    if(r()<0.5){const a=ri(r,2,6),x=nz(-6,6),b=nz(-12,12);return{L:{x:a,c:b},R:{x:0,c:a*x+b},X:x};}
+    const n=ri(r,2,5),k=nz(-6,6),b=nz(-10,10);return{L:{x:1/n,c:b},R:{x:0,c:k+b},X:n*k};
+  }
+  for(let t=0;t<200;t++){
+    let a=ri(r,1,5),c=ri(r,1,5);
+    if(a===c)continue;
+    if(r()<0.3)a=-a;
+    const x=nz(-6,6),b=nz(-12,12),d=(a-c)*x+b;
+    if(a!==c&&Math.abs(d)<=40)return{L:{x:a,c:b},R:{x:c,c:d},X:x};
+  }
+  return{L:{x:2,c:8},R:{x:5,c:-1},X:3};
+}
+/* --- formato --- */
+function numAbs(v){
+  const r=Math.round(v*1e9)/1e9;
+  if(Number.isInteger(r))return String(r);
+  for(let d=2;d<=24;d++){const n=r*d;if(Math.abs(n-Math.round(n))<1e-9)return Math.round(n)+'/'+d;}
+  return String(Math.round(r*1e4)/1e4);
+}
+function numSigned(v){return(v<0?MINUS:'')+numAbs(Math.abs(v));}
+function coefAbs(a){
+  const r=a;
+  if(Math.abs(r-1)<1e-9)return'x';
+  if(r<1){const inv=1/r;if(Math.abs(inv-Math.round(inv))<1e-6)return'x/'+Math.round(inv);}
+  return numAbs(r)+'x';
+}
+function fmtSideG(p){
+  const parts=[];
+  if(Math.abs(p.x)>EPS)parts.push({neg:p.x<0,txt:coefAbs(Math.abs(p.x))});
+  if(Math.abs(p.c)>EPS)parts.push({neg:p.c<0,txt:numAbs(Math.abs(p.c))});
+  if(!parts.length)return'0';
+  if(parts.length===2&&parts[0].neg&&!parts[1].neg)parts.reverse();
+  return parts.map((q,i)=>(i===0?(q.neg?MINUS:''):(q.neg?' '+MINUS+' ':' + '))+q.txt).join('');
+}
+function fmtEqG(s){return fmtSideG(s.L)+' = '+fmtSideG(s.R);}
+function fmtState(s){return fmtEqG(s);}
+function dec(v,n){const k=Math.pow(10,n===undefined?1:n);return String(Math.round(v*k)/k).replace('.',',');}
+/* resaltado para el registro de pasos con objetos (enteros) */
+function termList(p){const t=[];if(p.x)t.push({k:'x',v:p.x});if(p.c)t.push({k:'c',v:p.c});return t;}
+function absTxt(t){return t.k==='x'?(Math.abs(t.v)===1?'x':Math.abs(t.v)+'x'):String(Math.abs(t.v));}
+function sideHTML(p,hl){
+  const t=termList(p);
+  if(!t.length)return(hl&&(hl.x||hl.c))?'<mark class="chg">0</mark>':'0';
+  return t.map((q,i)=>{
+    const txt=(i===0?(q.v<0?MINUS:''):(q.v<0?' '+MINUS+' ':' + '))+absTxt(q);
+    return(hl&&hl[q.k])?'<mark class="chg">'+txt+'</mark>':txt;
+  }).join('');
+}
+function sidePlain(p){return sideHTML(p,null);}
+function fmtInt(s){return sidePlain(s.L)+' = '+sidePlain(s.R);}
+function solvedVal(s){
+  if(s.L.x===1&&s.L.c===0&&s.R.x===0)return s.R.c;
+  if(s.R.x===1&&s.R.c===0&&s.L.x===0)return s.L.c;
+  return null;
+}
+function solvedNeg(s){
+  if(s.L.x===-1&&s.L.c===0&&s.R.x===0)return-s.R.c;
+  if(s.R.x===-1&&s.R.c===0&&s.L.x===0)return-s.L.c;
+  return null;
+}
+/* ---- presentacion matematica: LaTeX con KaTeX (y respaldo HTML) ---- */
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function fracBox(a,b){return '<span class="frac"><span class="fn">'+a+'</span><span class="fd">'+b+'</span></span>';}
+function toLatex(str){
+  let s=String(str==null?'':str).trim();
+  if(s.includes('\\'))return s;
+  s=s.replace(/[-−–—]/g,'-').replace(/[*×]/g,'·').replace(/[÷:]/g,'/');
+  let i=0;
+  function group(stop){
+    const at=[];
+    while(i<s.length){
+      const c=s[i];
+      if(c===')'&&stop)break;
+      if(c==='('){i++;const inner=group(true);if(s[i]===')')i++;at.push({t:'a',h:'('+inner+')'});continue;}
+      if(/[0-9.,]/.test(c)){let j=i;while(j<s.length&&/[0-9.,]/.test(s[j]))j++;at.push({t:'a',h:s.slice(i,j)});i=j;continue;}
+      if(/\p{L}/u.test(c)){at.push({t:'a',h:c});i++;continue;}
+      if(c==='/'){at.push({t:'/'});i++;continue;}
+      if(c==='+'||c==='-'||c==='='||c==='·'){at.push({t:'o',v:c});i++;continue;}
+      if(c===' '){i++;continue;}
+      at.push({t:'a',h:c});i++;
+    }
+    for(let k=0;k<at.length;k++){
+      if(at[k].t==='o'&&at[k].v==='-'&&at[k+1]&&at[k+1].t==='a'){
+        const p=at[k-1];
+        if(!p||p.t==='o'||p.t==='/'){at.splice(k,2,{t:'a',h:'-'+at[k+1].h});k--;}
+      }
+    }
+    for(let k=0;k<at.length-1;k++){
+      if(at[k].t==='a'&&at[k+1].t==='a'){at.splice(k,2,{t:'a',h:at[k].h+at[k+1].h});k--;}
+    }
+    for(let k=0;k<at.length;k++){
+      if(at[k].t==='/'&&at[k-1]&&at[k-1].t==='a'&&at[k+1]&&at[k+1].t==='a'){
+        let num=at[k-1].h,den=at[k+1].h,sign='';
+        if(num.startsWith('-(')&&num.endsWith(')')){sign='- ';num=num.slice(2,-1);}
+        else if(num.startsWith('(')&&num.endsWith(')')){num=num.slice(1,-1);}
+        if(den.startsWith('(')&&den.endsWith(')')){den=den.slice(1,-1);}
+        at.splice(k-1,3,{t:'a',h:sign+'\\dfrac{'+num+'}{'+den+'}'});k-=2;
+      }
+    }
+    return at.map(q=>{
+      if(q.t==='o')return q.v==='·'?' \\cdot ':' '+q.v+' ';
+      if(q.t==='/')return'/';
+      return q.h;
+    }).join('').replace(/\s{2,}/g,' ').trim();
+  }
+  return group(false);
+}
+function mathFallbackHTML(str){
+  let s=String(str==null?'':str).replace(/[-−–—]/g,'-').replace(/[*×]/g,'·').replace(/[÷:]/g,'/');
+  let i=0;
+  function group(stop){
+    const at=[];
+    while(i<s.length){
+      const c=s[i];
+      if(c===')'&&stop)break;
+      if(c==='('){i++;const inner=group(true);if(s[i]===')')i++;at.push({t:'a',h:'('+inner+')'});continue;}
+      if(/[0-9.,]/.test(c)){let j=i;while(j<s.length&&/[0-9.,]/.test(s[j]))j++;at.push({t:'a',h:esc(s.slice(i,j))});i=j;continue;}
+      if(/\p{L}/u.test(c)){at.push({t:'a',h:'<i>'+esc(c)+'</i>'});i++;continue;}
+      if(c==='/'){at.push({t:'/'});i++;continue;}
+      if(c==='+'||c==='-'||c==='='||c==='·'){at.push({t:'o',v:c});i++;continue;}
+      if(c===' '){i++;continue;}
+      at.push({t:'a',h:esc(c)});i++;
+    }
+    for(let k=0;k<at.length;k++){
+      if(at[k].t==='o'&&at[k].v==='-'&&at[k+1]&&at[k+1].t==='a'){
+        const p=at[k-1];
+        if(!p||p.t==='o'||p.t==='/'){at.splice(k,2,{t:'a',h:'−'+at[k+1].h});k--;}
+      }
+    }
+    for(let k=0;k<at.length-1;k++){
+      if(at[k].t==='a'&&at[k+1].t==='a'){at.splice(k,2,{t:'a',h:at[k].h+at[k+1].h});k--;}
+    }
+    for(let k=0;k<at.length;k++){
+      if(at[k].t==='/'&&at[k-1]&&at[k-1].t==='a'&&at[k+1]&&at[k+1].t==='a'){
+        let num=at[k-1].h,den=at[k+1].h,sign='';
+        if(num.startsWith('−(')&&num.endsWith(')')){sign='− ';num=num.slice(2,-1);}
+        else if(num.startsWith('(')&&num.endsWith(')')){num=num.slice(1,-1);}
+        if(den.startsWith('(')&&den.endsWith(')')){den=den.slice(1,-1);}
+        at.splice(k-1,3,{t:'a',h:sign+fracBox(num,den)});k-=2;
+      }
+    }
+    return at.map(q=>{
+      if(q.t==='o')return' '+(q.v==='-'?'−':q.v)+' ';
+      if(q.t==='/')return'/';
+      return q.h;
+    }).join('').replace(/\s{2,}/g,' ').trim();
+  }
+  return group(false);
+}
+function mathHTML(str){
+  const tex=toLatex(str);
+  if(window.katex){
+    try{return window.katex.renderToString(tex,{throwOnError:false,displayMode:false});}
+    catch(e){}
+  }
+  return mathFallbackHTML(str);
+}
+/* ================= OBJETOS Y DIBUJO ================= */
+const DIMS={b:[64,58],nb:[64,58],u:[36,34],g:[40,54]};
+const KORD={b:0,nb:1,u:2,g:3};
+function panItems(p,W){
+  const out=[];
+  const nx=Math.round(Math.abs(p.x)),kx=p.x<0?'nb':'b';
+  for(let i=0;i<nx;i++)out.push({k:kx,val:1});
+  let v=Math.round(Math.abs(p.c));const kw=p.c<0?'g':'u';
+  const u=Math.max(1,Math.round((W&&W[kw])||1));
+  if(u>1){const q=Math.floor(v/u);for(let i=0;i<q;i++)out.push({k:kw,val:u});v-=q*u;}
+  for(let i=0;i<v;i++)out.push({k:kw,val:1});
+  return out;
+}
+function viewList(prev,cur,W){
+  const key=it=>it.k+':'+it.val;
+  const cnt=list=>{const m=new Map();list.forEach(it=>m.set(key(it),(m.get(key(it))||0)+1));return m;};
+  const a=prev?cnt(panItems(prev,W)):null,b=cnt(panItems(cur,W));
+  const ks=[];const push=k=>{if(ks.indexOf(k)<0)ks.push(k);};
+  if(a)a.forEach((v,k)=>push(k));b.forEach((v,k)=>push(k));
+  ks.sort((p,q)=>{
+    const[pk,pv]=p.split(':'),[qk,qv]=q.split(':');
+    return KORD[pk]-KORD[qk]||(+qv)-(+pv);
+  });
+  const out=[];
+  ks.forEach(kk=>{
+    const sp=kk.split(':'),k=sp[0],val=+sp[1];
+    const pn=a?(a.get(kk)||0):0,cn=b.get(kk)||0,n=Math.max(pn,cn);
+    for(let i=0;i<n;i++){
+      const ghost=i>=cn,hl=!ghost&&i>=pn;
+      out.push({k,val,ghost,hl});
+    }
+  });
+  return out;
+}
+function applyDim(items,dim){
+  const out=items.map(it=>({k:it.k,val:it.val,ghost:it.ghost,hl:it.hl}));
+  for(let i=out.length-1;i>=0;i--){
+    if(out[i].k===dim.k&&out[i].val===dim.val&&!out[i].ghost){out[i].ghost=true;break;}
+  }
+  return out;
+}
+function itemSize(it,s){
+  const d=DIMS[it.k]||DIMS.u;
+  let w=d[0];
+  if((it.k==='u'||it.k==='g')&&it.val>=10)w+=10;
+  return[w*s,d[1]*s];
+}
+function layoutPan(items,cx,base,W,H){
+  const build=s=>{
+    const rows=[];let row=[],rw=0,rh=0;
+    for(const it of items){
+      const sz=itemSize(it,s),w=sz[0]+6,h=sz[1];
+      if(row.length&&rw+w>W){rows.push({row,rh});row=[];rw=0;rh=0;}
+      row.push({it,w,h});rw+=w;rh=Math.max(rh,h);
+    }
+    if(row.length)rows.push({row,rh});
+    return rows;
+  };
+  let s=1,rows=build(s);
+  const tall=rs=>rs.reduce((a,r)=>a+r.rh,0)+6*Math.max(0,rs.length-1);
+  while(tall(rows)>H&&s>0.28){s*=0.88;rows=build(s);}
+  const out=[];let yb=base;
+  for(const r of rows){
+    const rw=r.row.reduce((a,q)=>a+q.w,0);let x=cx-rw/2;
+    for(const q of r.row){
+      out.push({k:q.it.k,val:q.it.val,ghost:q.it.ghost,hl:q.it.hl,x:x+3,y:yb-q.h,w:q.w-6,h:q.h,base:yb});
+      x+=q.w;
+    }
+    yb-=r.rh+6;
+  }
+  return out;
+}
+function itemMarkup(it,x,y,w,h,label,attrs){
+  const k=it.k,cx=x+w/2,v=it.val;let g='',name='';
+  if(k==='b'||k==='nb'){
+    const body=k==='b'?'#c98f4a':'#9b8ec9',edge=k==='b'?'#a8742f':'#5b4b8a',tie=k==='b'?'#a8742f':'#5b4b8a';
+    const txt=(k==='b'?'':MINUS)+label;
+    name=tr(k==='b'?'n_b':'n_nb');
+    g=`<polygon points="${cx-w*0.15},${y+h*0.22} ${cx+w*0.15},${y+h*0.22} ${cx+w*0.08},${y} ${cx-w*0.08},${y}" fill="${tie}"/>`+
+      `<rect x="${x+w*0.07}" y="${y+h*0.2}" width="${w*0.86}" height="${h*0.78}" rx="${h*0.22}" fill="${body}" stroke="${edge}" stroke-width="2"/>`+
+      `<text x="${cx}" y="${y+h*0.72}" text-anchor="middle" font-size="${h*0.46}" font-weight="700" fill="#fff" stroke="${edge}" stroke-width="0.8" paint-order="stroke" font-family="Georgia,serif">${txt}</text>`;
+  }else if(k==='u'){
+    name=tr('n_u',[v]);
+    g=`<rect x="${x+2}" y="${y+2}" width="${w-4}" height="${h-4}" rx="4" fill="#7f8c9a" stroke="#1f4e79" stroke-width="2"/>`+
+      `<text x="${cx}" y="${y+h*0.7}" text-anchor="middle" font-size="${h*(v>=10?0.42:0.55)}" font-weight="700" fill="#fff" stroke="#1f4e79" stroke-width="0.6" paint-order="stroke">${v}</text>`;
+  }else{
+    name=tr('n_g',[v]);
+    g=`<ellipse cx="${cx}" cy="${y+h*0.36}" rx="${w*0.4}" ry="${h*0.36}" fill="#e74c3c" stroke="#922b21" stroke-width="2"/>`+
+      `<polygon points="${cx-3},${y+h*0.74} ${cx+3},${y+h*0.74} ${cx},${y+h*0.68}" fill="#922b21"/>`+
+      `<text x="${cx}" y="${y+h*0.43}" text-anchor="middle" font-size="${h*(v>=10?0.24:0.28)}" font-weight="700" fill="#fff">${MINUS}${v}</text>`;
+  }
+  return `<g ${attrs||''}><title>${name}</title>${g}</g>`;
+}
+function drawScene(g,s,o){
+  const th=o.angle*Math.PI/180,P={x:450,y:95},Lh=270,S=200,W=o.W||{u:1,g:1};
+  const ends=[
+    {side:'L',x:P.x-Lh*Math.cos(th),y:P.y+Lh*Math.sin(th),d:s.L},
+    {side:'R',x:P.x+Lh*Math.cos(th),y:P.y-Lh*Math.sin(th),d:s.R}];
+  let out='<rect x="395" y="478" width="110" height="14" rx="5" fill="#3b3b3d"/>'+
+          '<polygon points="450,95 422,478 478,478" fill="#00a083"/>';
+  let strings='',pans='',items='';
+  for(const e of ends){
+    const trayY=e.y+S;
+    strings+=`<line x1="${e.x}" y1="${e.y}" x2="${e.x-150}" y2="${trayY}" stroke="#3b3b3d" stroke-width="2"/>`+
+             `<line x1="${e.x}" y1="${e.y}" x2="${e.x+150}" y2="${trayY}" stroke="#3b3b3d" stroke-width="2"/>`;
+    pans+=`<path d="M${e.x-155} ${trayY} L${e.x+155} ${trayY} L${e.x+120} ${trayY+16} L${e.x-120} ${trayY+16} Z" fill="#00a4b7" stroke="#3b3b3d" stroke-width="2"/>`;
+    let lst=viewList(o.prev?o.prev[e.side]:null,e.d,W);
+    if(o.dim)lst=applyDim(lst,o.dim);
+    const lay=layoutPan(lst,e.x,trayY,290,190);
+    for(const it of lay){
+      if(it.k==='g'&&!it.ghost){const cx=it.x+it.w/2;strings+=`<line x1="${cx}" y1="${it.y+it.h*0.72}" x2="${cx}" y2="${trayY}" stroke="#3b3b3d" stroke-width="1"/>`;}
+      const cls=it.ghost?'gh':('item'+(it.hl?' hl':''));
+      const data=it.ghost?'':` data-s="${e.side}" data-t="${it.k}" data-v="${it.val}"`;
+      items+=itemMarkup(it,it.x,it.y,it.w,it.h,o.label,`class="${cls}"${data}`);
+    }
+  }
+  out+=strings+`<line x1="${ends[0].x}" y1="${ends[0].y}" x2="${ends[1].x}" y2="${ends[1].y}" stroke="#3b3b3d" stroke-width="12" stroke-linecap="round"/>`+
+     `<circle cx="450" cy="95" r="14" fill="#afcb37" stroke="#3b3b3d" stroke-width="3"/>`+pans+items;
+  g.innerHTML=out;
+}
+/* ================= APLICACION ================= */
+const MODOS=['','traduce','construye','resuelve','escribe'];
+const SOLS=['mix','pos','zero','neg'];
+const TABDEF=[
+ {id:1,kind:'reto',reto:1,key:'t_r1'},
+ {id:2,kind:'reto',reto:2,key:'t_r2'},
+ {id:3,kind:'ex',mode:1,key:'t1'},
+ {id:4,kind:'ex',mode:2,key:'t2'},
+ {id:5,kind:'ex',mode:3,key:'t3'},
+ {id:6,kind:'paper',key:'t4'},
+ {id:7,kind:'short',key:'t5'},
+ {id:8,kind:'free',key:'t6'},
+ {id:9,kind:'notes',key:'t7'}
+];
+const EXTABS=[3,4,5];
+const FREE={mode:1,lvl:1,sol:'mix'};
+let EX={},TAB={},SEND={},RETO={},exCount=0,curTab=1,drag=null;
+let LOG=[],NOTES={a:'',b:'',c:''};
+const HEAD=['id','fecha','correo','apellido','nombre','grupo','idioma','actividad','nivel','semilla','enunciado','evento','resultado','detalle','notas','pasos'];
+let started=false,student=null,queue=[],sending=false,syncState='idle',timerOn=false,flushP=null;
+const $=id=>document.getElementById(id);
+const clone=o=>JSON.parse(JSON.stringify(o));
+function shuf(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function lsGet(k){try{return localStorage.getItem(k);}catch(e){return null;}}
+function lsSet(k,v){try{localStorage.setItem(k,v);}catch(e){}}
+function ssGet(k){try{return sessionStorage.getItem(k);}catch(e){return null;}}
+function ssSet(k,v){try{if(v===null)sessionStorage.removeItem(k);else sessionStorage.setItem(k,v);}catch(e){}}
+function loadQueue(){try{queue=JSON.parse(lsGet('bal_queue')||'[]')||[];if(!Array.isArray(queue))queue=[];}catch(e){queue=[];}}
+function saveQueue(){lsSet('bal_queue',JSON.stringify(queue));}
+function fillGroups(){
+  const s=$('lgGrp'),cur=s.selectedIndex>0?s.selectedIndex:0;
+  s.innerHTML='<option value="">'+tr('grp_ph')+'</option>'+GRUPOS[L].map(g=>'<option value="'+g+'">'+g+'</option>').join('');
+  s.selectedIndex=cur<s.options.length?cur:0;
+}
+function applyI18n(){
+  document.documentElement.lang=(L==='eu')?'eu':'es';
+  document.title=tr('title');
+  document.querySelectorAll('[data-i18n]').forEach(el=>{el.textContent=tr(el.getAttribute('data-i18n'));});
+  $('langBtn').textContent=tr('lang_btn');$('langBtn').title=tr('lang_title');
+  $('privBox').innerHTML=tr('priv');$('privBox').hidden=!CONFIG.ENDPOINT;
+  $('lgChkRow').hidden=!CONFIG.ENDPOINT;
+  $('lgDom').textContent=CONFIG.CORREO;
+  $('lgSkip').hidden=!CONFIG.DEV;
+  fillGroups();
+}
+function setLang(l){
+  L=(l==='eu')?'eu':'es';lsSet('bal_lang',L);
+  applyI18n();$('lgErr').hidden=true;updateWho();updateSync();
+  if(student&&TAB[3])buildApp();
+}
+function validate(v){
+  const nameRe=/^[\p{L}][\p{L}\s'’.\-]{0,39}$/u;
+  if(!nameRe.test(v.ap))return{k:'v_ap',f:'lgAp'};
+  if(!nameRe.test(v.nom))return{k:'v_nom',f:'lgNom'};
+  if(!v.grp)return{k:'v_grp',f:'lgGrp'};
+  if(!/^[\p{L}\p{N}._\-]{1,40}$/u.test(v.id))return{k:'v_mail',f:'lgMail'};
+  if(CONFIG.ENDPOINT&&!$('lgChk').checked)return{k:'v_chk',f:'lgChk'};
+  return null;
+}
+function doLogin(ev){
+  if(ev&&ev.preventDefault)ev.preventDefault();
+  const id=$('lgMail').value.trim().toLowerCase().split('@')[0].replace(/\s+/g,'');
+  const v={ap:$('lgAp').value.replace(/\s+/g,' ').trim(),nom:$('lgNom').value.replace(/\s+/g,' ').trim(),
+           grp:$('lgGrp').value,id,mail:id+CONFIG.CORREO};
+  const bad=validate(v);
+  if(bad){setFbLogin(tr(bad.k));const f=$(bad.f);if(f&&f.focus)f.focus();return;}
+  $('lgErr').hidden=true;
+  started=true;student=v;ssSet('bal_student',JSON.stringify(v));
+  showApp();track('inicio','—','',null);flush();
+}
+function doSkip(){
+  started=true;
+  student={ap:'Prueba',nom:'Prueba',grp:(GRUPOS[L][0]||'—'),id:'prueba',mail:'prueba'+CONFIG.CORREO,test:true};
+  ssSet('bal_student',JSON.stringify(student));
+  showApp();
+}
+function setFbLogin(t){const e=$('lgErr');e.textContent=t;e.hidden=false;}
+function doLogout(){
+  flush();student=null;started=false;
+  ssSet('bal_student',null);ssSet('bal_started',null);ssSet('bal_tab',null);ssSet('bal_free',null);
+  TAB={};SEND={};EX={};RETO={};LOG=[];NOTES={a:'',b:'',c:''};
+  ['lgAp','lgNom','lgMail'].forEach(i=>{$(i).value='';});$('lgGrp').selectedIndex=0;$('lgChk').checked=false;
+  showApp();
+}
+function showApp(){
+  $('landing').hidden=started;$('hdr').hidden=!started;
+  $('login').hidden=!started||!!student;$('app').hidden=!student;
+  $('logout').hidden=!student;$('syncbar').hidden=!(student&&CONFIG.ENDPOINT);
+  updateWho();updateSync();
+  if(student&&!TAB[3])initAll();
+}
+function pickLang(l){started=true;ssSet('bal_started','1');setLang(l);showApp();const f=$('lgAp');if(f&&f.focus)f.focus();}
+function updateWho(){const w=$('who');w.hidden=!student;w.textContent=student?tr('who',[student.ap,student.nom,student.grp]):'';}
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,8);}
+/* Registro: se guarda SIEMPRE en el dispositivo (LOG) y, si hay ENDPOINT, tambien se envia (queue). */
+function track(evento,resultado,detalle,ex,extra){
+  if(!student||student.test)return;
+  const row=[uid(),new Date().toISOString(),student.mail,student.ap,student.nom,student.grp,L,
+    ex?((ex.free?'libre-':'')+MODOS[ex.mode]):'',ex?ex.lvl:'',ex?ex.seed:'',ex?fmtState(ex.task):'',
+    evento,resultado,String(detalle==null?'':detalle).slice(0,200),String(extra||'').slice(0,1500),ex?ex.steps:''];
+  LOG.push(row);if(LOG.length>2000)LOG.shift();
+  lsSet('bal_log_'+student.id,JSON.stringify(LOG));
+  if(!CONFIG.ENDPOINT)return;
+  queue.push(row);saveQueue();if(queue.length>=5)flush();ensureTimer();updateSync();
+}
+function ensureTimer(){
+  if(timerOn||typeof setInterval!=='function')return;timerOn=true;
+  setInterval(()=>{if(queue.length&&!sending&&syncState!=='rej')flush();},6000);
+}
+function updateSync(){
+  const bar=$('syncbar');if(!bar)return;
+  let t='';
+  if(CONFIG.ENDPOINT){
+    if(sending)t=tr('s_sending');
+    else if(syncState==='rej')t=tr('s_rej');
+    else if(queue.length)t=tr('s_pending',[queue.length]);
+    else if(syncState==='unconf')t=tr('s_unconf');
+    else if(syncState==='ok')t=tr('s_ok');
+  }
+  $('syncTxt').textContent=t;
+  $('retry').hidden=!(CONFIG.ENDPOINT&&!sending&&(syncState==='rej'||syncState==='fail'||queue.length>0));
+}
+async function postBatch(batch){
+  const body=JSON.stringify({token:CONFIG.TOKEN,rows:batch});
+  const hdr={'Content-Type':'text/plain;charset=utf-8'};
+  let resp;
+  try{resp=await fetch(CONFIG.ENDPOINT,{method:'POST',headers:hdr,body,redirect:'follow'});}
+  catch(e){
+    await fetch(CONFIG.ENDPOINT,{method:'POST',mode:'no-cors',headers:hdr,body});
+    return'unconf';
+  }
+  let j=null;try{j=await resp.json();}catch(e){return'rej';}
+  return(j&&j.ok)?'ok':'rej';
+}
+function flush(){
+  if(flushP)return flushP;
+  if(!CONFIG.ENDPOINT||!queue.length)return Promise.resolve();
+  flushP=(async()=>{
+    sending=true;updateSync();
+    try{
+      while(queue.length){
+        const batch=queue.slice(0,25);
+        const r=await postBatch(batch);
+        if(r==='rej'){syncState='rej';break;}
+        queue.splice(0,batch.length);saveQueue();syncState=r;
+      }
+    }catch(e){syncState='fail';}
+    sending=false;flushP=null;updateSync();
+  })();
+  return flushP;
+}
+/* ----- ejercicios ----- */
+function rndTask(lvl,sol){
+  const seed=1+Math.floor(Math.random()*9000);
+  const g=gen(lvl,seed,sol);
+  return{task:{L:{x:g.a,c:g.b},R:{x:g.c,c:g.d},X:g.x},seed:seed+'-'+sol};
+}
+function makeEx(mode,lvl,sol,free,tk){
+  let task,seed;
+  if(mode>=4){const s=1+Math.floor(Math.random()*9000);task=genW(lvl,s);seed=s+'-w';}
+  else{const t=tk||rndTask(lvl,sol);task=t.task;seed=t.seed;}
+  const ex={id:++exCount,mode,free:!!free,lvl,content:sol,seed,task,
+    built:{L:{x:0,c:0},R:{x:0,c:0}},st3:clone(task),hist:[],W:{u:1,g:1},
+    logArr:[{parts:[{key:'l_init'}],state:clone(task)}],
+    wlines:[{L:clone(task.L),R:clone(task.R),d:null}],
+    angle:0,anim:null,locked:false,checked:false,result:'',answer:'',fbs:{main:null,v:null},
+    steps:0,solvedLogged:false,showSol:false,dimK:null,el:null};
+  EX[ex.id]=ex;
+  return ex;
+}
+function pickSet(mode){
+  const out=[],seen=new Set();
+  for(let lvl=1;lvl<=4;lvl++){
+    shuf(SOLS.slice()).slice(0,2).forEach(sol=>{
+      let tk,t=0;
+      do{tk=rndTask(lvl,sol);t++;}while(seen.has(fmtInt(tk.task))&&t<20);
+      seen.add(fmtInt(tk.task));
+      out.push(makeEx(mode,lvl,sol,false,tk));
+    });
+  }
+  return out;
+}
+function newReto(){return{eq:'',num:'',txt:'',fb1:null,fb2:null,ok1:false,ok2:false,sent:false,warned:false,sfb:null};}
+function initAll(){
+  EX={};TAB={};SEND={};RETO={1:newReto(),2:newReto()};
+  try{LOG=JSON.parse(lsGet('bal_log_'+student.id)||'[]')||[];if(!Array.isArray(LOG))LOG=[];}catch(e){LOG=[];}
+  NOTES={a:'',b:'',c:''};
+  try{NOTES=Object.assign({a:'',b:'',c:''},JSON.parse(lsGet('bal_notes_'+student.id)||'{}'));}catch(e){}
+  try{const f=JSON.parse(ssGet('bal_free')||'null');if(f&&f.mode)Object.assign(FREE,f);}catch(e){}
+  TAB[3]=pickSet(1);TAB[4]=pickSet(2);TAB[5]=pickSet(3);
+  TAB[8]=[makeEx(FREE.mode,FREE.lvl,FREE.sol,true)];
+  EXTABS.forEach(n=>SEND[n]={});
+  const savedTab=+ssGet('bal_tab');
+  curTab=(savedTab>=1&&savedTab<=9)?savedTab:1;
+  if(!CONFIG.APUNTES&&(curTab===6||curTab===7))curTab=1;
+  buildApp();
+}
+/* ----- construccion de la interfaz ----- */
+function toolbarHTML(){
+  const opt=(v,k,cur)=>`<option value="${v}"${String(cur)===String(v)?' selected':''}>${tr(k)}</option>`;
+  const acts=CONFIG.APUNTES?[1,2,3,4,5]:[1,2,3,4];
+  return `<div class="card toolbar">
+    <label><span>${tr('act')}</span><select class="fmode">${acts.map(n=>opt(n,'ac'+n,FREE.mode)).join('')}</select></label>
+    <label><span>${tr('lvl')}</span><select class="flvl">${opt(1,'lv1',FREE.lvl)}${opt(2,'lv2',FREE.lvl)}${opt(3,'lv3',FREE.lvl)}${opt(4,'lv4',FREE.lvl)}</select></label>
+    <label><span>${tr('sol')}</span><select class="fsol">${opt('mix','so_mix',FREE.sol)}${opt('pos','so_pos',FREE.sol)}${opt('zero','so_zero',FREE.sol)}${opt('neg','so_neg',FREE.sol)}</select></label>
+    <button type="button" class="fnew">${tr('btn_new')}</button></div>`;
+}
+function retoPaneHTML(n){
+  return `<div class="card reto" data-r="${n}">
+   <div class="rstat">${tr('r'+n+'_txt')}</div>
+   <div class="row"><label class="rq">${tr('r'+n+'_q1')}<input type="text" class="rq1 eqin" placeholder="${tr('r'+n+'_ph1')}" autocomplete="off"><span class="eqbig eqprev" aria-hidden="true"></span></label><button type="button" class="rchk1">${tr('btn_check')}</button></div>
+   <div class="fb rfb1" hidden aria-live="polite"></div>
+   <div class="row"><label class="rq">${tr('r'+n+'_q2')}<input type="text" class="rq2" placeholder="${tr('r'+n+'_ph2')}" autocomplete="off"></label><button type="button" class="rchk2">${tr('btn_check')}</button></div>
+   <div class="fb rfb2" hidden aria-live="polite"></div>
+   <div class="row col"><label class="rq">${tr('r'+n+'_q3')}<textarea class="rq3" rows="3"></textarea></label><small>${tr('r_note')}</small></div>
+   <div class="sendbox" style="margin-top:10px"><button type="button" class="sendr" data-r="${n}">${tr('btn_send')}</button><div class="fb rsfb" hidden aria-live="polite"></div></div>
+  </div>`;
+}
+function head(t){
+  const k=t.kind==='reto'?('t_r'+t.reto):t.key;
+  const sk=t.kind==='reto'?('s_r'+t.reto):('s'+t.key.slice(1));
+  return `<h2 style="margin:.2em 0 0">${tr(k)}</h2><p class="sub">${tr(sk)}</p>`;
+}
+function paperHTML(t){
+  const ex=[1,2,3,4].map(n=>`<article class="wex">${PBHTML(n)}</article>`).join('');
+  return `<div class="card">${head(t)}<div class="mission fb q" style="margin:0 0 4px">${tr('pb_intro')}</div>`+
+    `<div class="fb warn">${tr('pb_tip')}</div>${ex}</div>`;
+}
+/* ---- el atajo: de la balanza a la regla de toda la vida ---- */
+const SHC={
+ 1:{bal:['x + 11 = 4','x + 11 - 11 = 4 - 11','x = 4 - 11','x = -7'],sho:['x + 11 = 4','x = 4 - 11','x = -7'],mv:'+ 11 \u2192 \u2212 11'},
+ 2:{bal:['x - 7 = 5','x - 7 + 7 = 5 + 7','x = 5 + 7','x = 12'],sho:['x - 7 = 5','x = 5 + 7','x = 12'],mv:'\u2212 7 \u2192 + 7'},
+ 3:{bal:['4x = -24','4x/4 = -24/4','x = -24/4','x = -6'],sho:['4x = -24','x = -24/4','x = -6'],mv:'\u00b7 4 \u2192 \u00f7 4'},
+ 4:{bal:['x/5 = -3','x/5 · 5 = -3 · 5','x = -3 · 5','x = -15'],sho:['x/5 = -3','x = -3 · 5','x = -15'],mv:'\u00f7 5 \u2192 \u00b7 5'}
+};
+function shLines(a){return a.map(l=>`<div class="stepE">${mathHTML(l)}</div>`).join('');}
+function SHHTML(n){
+  const d=SHC[n];
+  return `<h3>${tr('sh_t'+n)} <span class="mv">${d.mv}</span></h3>`+
+    `<div class="cmp"><div class="bal0"><h4>${tr('sh_bal')}</h4>${shLines(d.bal)}</div>`+
+    `<div class="sho"><h4>${tr('sh_sho')}</h4>${shLines(d.sho)}</div></div>`+
+    `<div class="rule">${tr('sh_r'+n)}</div>`+
+    `<div class="idea"><b>${tr('sh_why')}</b> ${tr('sh_w'+n)}</div>`;
+}
+function shortHTML(t){
+  const ex=[1,2,3,4].map(n=>`<article class="wex">${SHHTML(n)}</article>`).join('');
+  return `<div class="card">${head(t)}<div class="mission fb q" style="margin:0 0 4px">${tr('sh_intro')}</div>`+
+    `${ex}<div class="fb bad">${tr('sh_warn')}</div><div class="fb q">${tr('sh_try')}</div></div>`;
+}
+function paneHTML(t){
+  if(t.kind==='notes')return notesHTML(t);
+  if(t.kind==='paper')return paperHTML(t);
+  if(t.kind==='short')return shortHTML(t);
+  if(t.kind==='reto')return `<div class="card">${head(t)}</div>`+retoPaneHTML(t.reto);
+  let h=`<div class="card">${head(t)}</div>`;
+  if(t.kind==='free')h+=toolbarHTML();
+  h+=`<div class="card mission" id="mis${t.id}"></div><div class="exgrid${t.kind==='free'?' one':''}" id="list${t.id}"></div>`;
+  if(t.kind==='ex')h+=`<div class="card sendbox"><button type="button" class="send" data-tab="${t.id}">${tr('btn_send')}</button><div class="fb" id="sfb${t.id}" hidden aria-live="polite"></div></div>`;
+  return h;
+}
+/* ---- papel y boli: 4 ejemplos resueltos ---- */
+const PB={
+ 1:{eq:'x - 7 = 5',rows:[['x - 7','5',null],['x - 7 + 7','5 + 7',['pb_opadd','7']],['x','12',null]],chk:'12 - 7 = 5'},
+ 2:{eq:'x + 11 = 4',rows:[['x + 11','4',null],['x + 11 - 11','4 - 11',['pb_opsub','11']],['x','-7',null]],chk:'-7 + 11 = 4'},
+ 3:{eq:'x/5 = -3',rows:[['x/5','-3',null],['x/5 · 5','-3 · 5',['pb_opmul','5']],['x','-15',null]],chk:'-15/5 = -3'},
+ 4:{eq:'4x = -24',rows:[['4x','-24',null],['4x/4','-24/4',['pb_opdiv','4']],['x','-6',null]],chk:'4 · (-6) = -24'}
+};
+function PBHTML(n){
+  const d=PB[n];
+  const rows=d.rows.map(r=>
+    `<tr><td class="eqc">${mathHTML(r[0])}</td><td class="eqs">=</td><td class="eqr">${mathHTML(r[1])}</td>`+
+    `<td class="opc">${r[2]?'<span class="opx">'+tr(r[2][0],[r[2][1]])+'</span>':''}</td></tr>`).join('');
+  return `<h3>${tr('pb_t'+n)} · <span class="eqbig">${mathHTML(d.eq)}</span></h3>`+
+    `<div class="idea">${tr('pb_i'+n)}</div><table class="wtab">${rows}</table>`+
+    `<div class="ok">${tr('pb_ch')} ${mathHTML(d.chk)} ✅</div>`;
+}
+function buildApp(){
+  const VT=TABDEF.filter(t=>CONFIG.APUNTES||(t.kind!=='paper'&&t.kind!=='short'));
+  $('tabs').innerHTML=VT.map(t=>{
+    const sk=t.kind==='reto'?('s_r'+t.reto):('s'+t.key.slice(1));
+    const k=t.kind==='reto'?('t_r'+t.reto):t.key;
+    return `<button class="tab" id="t_${t.id}" type="button" title="${tr(sk)}">${tr(k)}</button>`;
+  }).join('');
+  $('panes').innerHTML=VT.map(t=>`<section id="pane${t.id}">${paneHTML(t)}</section>`).join('');
+  VT.forEach(t=>{
+    const m=$('mis'+t.id);
+    if(m)m.textContent=tr('m'+(t.kind==='free'?FREE.mode:t.mode));
+    if(t.kind==='reto')initReto(t.reto);
+    else if(t.kind==='ex'||t.kind==='free')buildList(t.id);
+    else if(t.kind==='notes')initNotes();
+  });
+  EXTABS.forEach(showSendFb);
+  document.querySelectorAll('#app .eqin').forEach(eqPreview);
+  setTab(curTab);
+}
+function setTab(n){
+  curTab=n;
+  ssSet('bal_tab',String(n));
+  TABDEF.forEach(t=>{
+    const b=$('t_'+t.id),p=$('pane'+t.id);
+    if(b)b.classList.toggle('on',t.id===n);
+    if(p)p.hidden=t.id!==n;
+  });
+  window.scrollTo(0,0);
+}
+function newFree(){
+  if(TAB[8])TAB[8].forEach(e=>{delete EX[e.id];if(e.anim)cancelAnimationFrame(e.anim);});
+  TAB[8]=[makeEx(FREE.mode,FREE.lvl,FREE.sol,true)];
+  buildList(8);
+  const m=$('mis8');if(m)m.textContent=tr('m'+FREE.mode);
+}
+/* ----- tarjetas ----- */
+function labelOf(ex){return ex.mode===3?'?':'x';}
+function curState(ex){return ex.mode===1?ex.task:ex.mode===2?ex.built:ex.st3;}
+function targetAngle(ex){
+  if(ex.mode!==2)return 0;
+  const s=ex.built;
+  const d=(s.L.x*ex.task.X+s.L.c)-(s.R.x*ex.task.X+s.R.c);
+  if(Math.abs(d)<1e-9)return 0;
+  return Math.sign(d)*Math.min(11,3+Math.abs(d)*1.1);
+}
+function lastChange(ex){
+  if(ex.mode!==3||ex.logArr.length<2)return null;
+  const e=ex.logArr[ex.logArr.length-1];
+  return{L:e.prev.L,R:e.prev.R};
+}
+function tokIcon(k,val,label){
+  const sz=itemSize({k,val},1);
+  return `<svg class="grab" viewBox="0 0 ${sz[0]} ${sz[1]}" width="${Math.round(sz[0]*1.15)}" height="${Math.round(sz[1]*1.15)}" aria-hidden="true">${itemMarkup({k,val},0,0,sz[0],sz[1],label,'')}</svg>`;
+}
+function tokCap(k,val){return(k==='u'||k==='g')?tr('tk_'+k)+' '+(k==='g'?MINUS:'')+val:tr('tk_'+k);}
+function tokHTML(ex,k,label){
+  const sack=(k==='b'||k==='nb'),val=sack?1:ex.W[k];
+  const box=sack?`<span>${tokCap(k,val)}</span>`:
+    `<input type="number" class="nsel" data-t="${k}" min="1" max="99" step="1" value="${val}" aria-label="${tokCap(k,val)}">`;
+  return `<div class="tok" data-t="${k}" data-v="${val}" tabindex="0" role="button" aria-label="${tokCap(k,val)}">${tokIcon(k,val,label)}${box}</div>`;
+}
+function shelfHTML(ex){
+  const lab=labelOf(ex);
+  return `<div class="shelf"><b>${tr('shelf')}</b>${['b','nb','u','g'].map(k=>tokHTML(ex,k,lab)).join('')}`+
+    `<span class="wwrap">${tr('w_hint')}</span></div>`;
+}
+function updateTok(ex,k){
+  const sh=ex.el&&ex.el.querySelector('.shelf');if(!sh)return;
+  const t=sh.querySelector('.tok[data-t="'+k+'"]');if(!t)return;
+  const val=ex.W[k],lab=labelOf(ex);
+  t.dataset.v=val;t.setAttribute('aria-label',tokCap(k,val));
+  const sv=t.querySelector('svg');
+  if(sv)sv.outerHTML=tokIcon(k,val,lab);
+  const inp=t.querySelector('.nsel');if(inp)inp.setAttribute('aria-label',tokCap(k,val));
+}
+function cardHTML(ex,n){
+  const m=ex.mode;
+  let h='';
+  if(!ex.free)h+=`<h3 class="exn">${tr('ex_n',[n])}</h3>`;
+  if(m===2)h+=`<div class="target"><b class="eqbig">${mathHTML(fmtInt(ex.task))}</b></div>`;
+  if(m>=4)h+=`<div class="target"><b class="eqbig">${mathHTML(fmtEqG(ex.task))}</b></div><div class="goal">${tr(m===5?'sh_goal':'esc_goal')}</div>`;
+  if(m<=3)h+=`<div class="stage"><svg class="bal${m>=2?' edit':''}" viewBox="0 0 900 500" role="img"><g class="scene"></g>`+
+     `<rect class="dz dzL" x="4" y="4" width="442" height="492" rx="14" style="display:none"/>`+
+     `<rect class="dz dzR" x="454" y="4" width="442" height="492" rx="14" style="display:none"/></svg></div><p class="sr desc"></p>`;
+  if(m===1){
+    h+=`<div class="row"><input type="text" class="ans eqin" aria-label="${tr('q1_lbl')}" placeholder="${tr('q1_ph')}" autocomplete="off">`+
+       `<button type="button" class="chk">${tr('btn_check')}</button></div><div class="eqbig eqprev" aria-hidden="true"></div>`;
+  }else if(m===2){
+    h+=shelfHTML(ex)+`<div class="row"><button type="button" class="chk">${tr('btn_check')}</button>`+
+       `<button type="button" class="clr ghost">${tr('btn_clr')}</button></div>`;
+  }else if(m===3){
+    h+=shelfHTML(ex)+`<div class="row">`+
+       `<button type="button" class="undo ghost">${tr('btn_undo')}</button><button type="button" class="reset ghost">${tr('btn_reset')}</button></div>`;
+  }else{
+    if(m===5)h+=`<div class="fb warn">${tr('sh_free')}</div>`;
+    h+=`<div class="log wlog"></div>`+
+       `<div class="row"><label class="rq">${tr(m===5?'sh_next':'esc_next')}<input type="text" class="wans eqin" placeholder="${tr(m===5?'sh_ph':'esc_ph')}" autocomplete="off"><span class="eqbig eqprev" aria-hidden="true"></span></label>`+
+       `<button type="button" class="wchk">${tr('btn_step')}</button><button type="button" class="wundo ghost">${tr('btn_undo')}</button>`+
+       `<button type="button" class="wreset ghost">${tr('btn_reset')}</button></div>`;
+  }
+  h+=`<div class="fb main" hidden aria-live="polite"></div>`;
+  if(m===2)h+=`<div class="solview" hidden><b>${tr('ex_sol')}</b><div class="stage"><svg class="solsvg" viewBox="0 0 900 500" role="img"><g class="scene"></g></svg></div></div>`;
+  if(m===3){
+    h+=`<div class="log"></div>`+
+       `<div class="row vrow"><label>${tr('vf_pre')} <input type="text" class="vin" autocomplete="off"></label>`+
+       `<small>${tr('vf_post')}</small><button type="button" class="vchk">${tr('btn_check')}</button></div>`+
+       `<div class="fb vfb" hidden aria-live="polite"></div>`;
+  }
+  return h;
+}
+function buildList(n){
+  const list=$('list'+n),arr=TAB[n];if(!list||!arr)return;
+  list.innerHTML=arr.map((ex,i)=>'<article class="card ex" data-id="'+ex.id+'">'+cardHTML(ex,i+1)+'</article>').join('');
+  arr.forEach(ex=>{ex.el=list.querySelector('[data-id="'+ex.id+'"]');initCard(ex);});
+}
+function initCard(ex){
+  const a=ex.el.querySelector('.ans')||ex.el.querySelector('.vin')||ex.el.querySelector('.wans');
+  if(a)a.value=ex.answer||'';
+  ex.angle=targetAngle(ex);
+  refreshCard(ex);showFb(ex,'main');showFb(ex,'v');
+  if(ex.mode===3)renderLog(ex);
+  if(ex.mode>=4)renderWLog(ex);
+  if(ex.showSol)showSolView(ex);
+  draw(ex);
+}
+function refreshCard(ex){
+  const el=ex.el;if(!el)return;
+  el.classList.toggle('locked',!!ex.locked);
+  el.querySelectorAll('button,input,textarea').forEach(b=>{b.disabled=!!ex.locked;});
+}
+function setFb(ex,cls,get,html,w){w=w||'main';ex.fbs[w]={cls,get,html:!!html};showFb(ex,w);}
+function clearFb(ex,w){w=w||'main';ex.fbs[w]=null;showFb(ex,w);}
+function showFb(ex,w){
+  if(!ex.el)return;
+  const el=ex.el.querySelector(w==='v'?'.vfb':'.fb.main');if(!el)return;
+  const f=ex.fbs[w];
+  if(!f){el.hidden=true;el.textContent='';return;}
+  el.className='fb '+f.cls+(w==='v'?' vfb':' main');
+  const t=f.get();if(f.html)el.innerHTML=t;else el.textContent=t;
+  el.hidden=false;
+}
+function lockEx(ex,res){ex.checked=true;ex.result=res;if(!ex.free)ex.locked=true;refreshCard(ex);}
+function solHTML(ex){return ex.free?'':'<br><b>'+tr('ex_sol')+'</b> <span class="eqbig">'+mathHTML(fmtInt(ex.task))+'</span>';}
+function solHTML2(ex){return ex.free?'':'<br><b>'+tr('ex_sol')+'</b> <span class="eqbig">'+mathHTML('x = '+ex.task.X)+'</span>';}
+function draw(ex){
+  if(!ex.el)return;
+  const svg=ex.el.querySelector('.bal');if(!svg)return;
+  const s=curState(ex);
+  drawScene(svg.querySelector('.scene'),s,{angle:ex.angle,label:labelOf(ex),prev:lastChange(ex),dim:ex.dimK,W:ex.W});
+  const dsc=p=>[p.x>0?pl(p.x,'b'):'',p.x<0?pl(-p.x,'nb'):'',p.c?tr('a_w',[(p.c>0?'+':MINUS)+Math.abs(p.c)]):''].filter(Boolean).join(', ')||tr('empty');
+  const txt=tr('aria_L')+': '+dsc(s.L)+'. '+tr('aria_R')+': '+dsc(s.R)+'.';
+  svg.setAttribute('aria-label',txt);
+  const d=ex.el.querySelector('.desc');if(d)d.textContent=txt;
+}
+function render(ex){
+  const t=targetAngle(ex);
+  if(ex.anim){cancelAnimationFrame(ex.anim);ex.anim=null;}
+  const step=()=>{
+    const diff=t-ex.angle;
+    if(Math.abs(diff)<0.05){ex.angle=t;draw(ex);ex.anim=null;return;}
+    ex.angle+=diff*0.18;draw(ex);ex.anim=requestAnimationFrame(step);
+  };
+  step();
+}
+function showSolView(ex){
+  const sv=ex.el&&ex.el.querySelector('.solview');if(!sv)return;
+  sv.hidden=false;
+  drawScene(sv.querySelector('.scene'),ex.task,{angle:0,label:'x',prev:null,dim:null,W:{u:1,g:1}});
+}
+/* ----- registro de pasos con objetos ----- */
+function objName(k,val){return tr('o_'+k,[val]);}
+function symFor(k,val,sg){
+  if(k==='b')return(sg==='+'?'+ ':MINUS+' ')+'x';
+  if(k==='nb')return(sg==='+'?MINUS+' ':'+ ')+'x';
+  if(k==='u')return(sg==='+'?'+ ':MINUS+' ')+val;
+  return(sg==='+'?MINUS+' ':'+ ')+val;
+}
+function entryText(l,lang){return l.parts.map(p=>tr(p.key,p.args,lang)).join(' · ');}
+function sideWithOp(p,e){
+  if(e.split)return'('+sidePlain(p)+') <mark class="chg">÷ '+e.split+'</mark>';
+  return sidePlain(p)+' <mark class="chg">'+e.sym+'</mark>';
+}
+function eqWithOp(e){return sideWithOp(e.prev.L,e)+' = '+sideWithOp(e.prev.R,e);}
+function eqChanged(e){
+  const h=(a,b)=>({x:a.x!==b.x,c:a.c!==b.c});
+  return sideHTML(e.state.L,h(e.state.L,e.prev.L))+' = '+sideHTML(e.state.R,h(e.state.R,e.prev.R));
+}
+function renderLog(ex){
+  const lg=ex.el&&ex.el.querySelector('.log:not(.wlog)');if(!lg)return;
+  lg.innerHTML=ex.logArr.map((l,i)=>{
+    if(i===0)return `<div class="step"><div class="stepT">0. ${entryText(l)}</div><div class="stepE">${fmtInt(l.state)}</div></div>`;
+    const sy=l.split?'÷ '+l.split:l.sym;
+    return `<div class="step"><div class="stepT">${i}. ${entryText(l)} <span class="opx">${sy}</span></div>`+
+      `<div class="stepE">${eqWithOp(l)} <span class="arr">⟹</span> ${eqChanged(l)}</div></div>`;
+  }).join('');
+  lg.scrollTop=lg.scrollHeight;
+}
+/* ----- modo 1 ----- */
+function check1(ex){
+  if(ex.locked)return;
+  const raw=ex.el.querySelector('.ans').value;
+  let e;
+  try{e=parseEq(raw);}
+  catch(err){const msg=err.message;setFb(ex,'bad',()=>msg);track('traduce','error de escritura',raw,ex);return;}
+  if(e.vars.size===0){setFb(ex,'bad',()=>tr('f1_noletter'));track('traduce','sin letra',raw,ex);return;}
+  const tg={L:{a:ex.task.L.x,b:ex.task.L.c},R:{a:ex.task.R.x,b:ex.task.R.c}};
+  const j=judge(e,tg);ex.answer=raw;
+  let res;
+  if(j==='exact'||j==='swap'){res='correcto';setFb(ex,'ok',()=>'✔ '+tr('f1_ok'),true);}
+  else if(j==='equiv'){res='equivalente';setFb(ex,'warn',()=>tr('f1_equiv')+solHTML(ex),true);}
+  else{res='incorrecto';setFb(ex,'bad',()=>diag(e,tg,1)+solHTML(ex),true);}
+  track('traduce',res,raw,ex);lockEx(ex,res);
+}
+/* ----- modo 2 ----- */
+function tryAdd(q,k,val){
+  if(k==='b'){if(q.x>=8)return{ok:false,msg:'maxb'};q.x++;return{ok:true};}
+  if(k==='nb'){if(q.x<=-8)return{ok:false,msg:'maxb'};q.x--;return{ok:true};}
+  if(k==='u'){if(q.c+val>99)return{ok:false,msg:'maxu'};const note=q.c<0;q.c+=val;return{ok:true,note};}
+  if(q.c-val<-99)return{ok:false,msg:'maxg'};
+  const note=q.c>0;q.c-=val;return{ok:true,note};
+}
+function tryRemove(q,k,val){
+  if(k==='b'&&q.x>0){q.x--;return true;}
+  if(k==='nb'&&q.x<0){q.x++;return true;}
+  if(k==='u'&&q.c>=val){q.c-=val;return true;}
+  if(k==='g'&&q.c<=-val){q.c+=val;return true;}
+  return false;
+}
+function check2(ex){
+  if(ex.locked)return;
+  const b=ex.built;
+  const e={L:{a:b.L.x,b:b.L.c},R:{a:b.R.x,b:b.R.c}};
+  const tg={L:{a:ex.task.L.x,b:ex.task.L.c},R:{a:ex.task.R.x,b:ex.task.R.c}};
+  const mine=fmtInt(b);
+  if(!b.L.x&&!b.L.c&&!b.R.x&&!b.R.c){setFb(ex,'warn',()=>tr('f2_empty'));track('construye','vacío','',ex);return;}
+  const j=judge(e,tg);ex.answer=mine;
+  let res;
+  if(j==='exact'){res='correcto';setFb(ex,'ok',()=>'✔ '+tr('f2_ok'));}
+  else if(j==='swap'){res='correcto';setFb(ex,'ok',()=>'✔ '+tr('f2_swap'));}
+  else if(j==='equiv'){res='equivalente';setFb(ex,'warn',()=>tr('f2_equiv'));}
+  else{res='incorrecto';setFb(ex,'bad',()=>diag(e,tg,2));}
+  if(res!=='correcto'&&!ex.free){ex.showSol=true;showSolView(ex);}
+  track('construye',res,mine,ex);lockEx(ex,res);
+}
+/* ----- modo 3 ----- */
+function doOp(ex,k,val,sg){
+  if(ex.locked||ex.mode!==3)return;
+  if(['b','nb','u','g'].indexOf(k)<0)return;
+  val=+val||1;
+  const s=clone(ex.st3),sd=[s.L,s.R];
+  let err='';
+  if(k==='b'){
+    if(sg==='-'){if(sd.some(p=>p.x<1))err='er_b';else sd.forEach(p=>p.x-=1);}
+    else{if(sd.some(p=>p.x+1>8))err='er_b8';else sd.forEach(p=>p.x+=1);}
+  }else if(k==='nb'){
+    if(sg==='-'){if(sd.some(p=>p.x>-1))err='er_nb';else sd.forEach(p=>p.x+=1);}
+    else{if(sd.some(p=>p.x-1<-8))err='er_b8';else sd.forEach(p=>p.x-=1);}
+  }else if(k==='u'){
+    if(sg==='-'){if(sd.some(p=>p.c<val))err='er_u';else sd.forEach(p=>p.c-=val);}
+    else{if(sd.some(p=>p.c+val>99))err='maxu';else sd.forEach(p=>p.c+=val);}
+  }else{
+    if(sg==='-'){if(sd.some(p=>p.c>-val))err='er_g';else sd.forEach(p=>p.c+=val);}
+    else{if(sd.some(p=>p.c-val<-99))err='maxg';else sd.forEach(p=>p.c-=val);}
+  }
+  if(err){const e2=err;setFb(ex,'warn',()=>tr(e2,[val]));draw(ex);return;}
+  pushState(ex,s,{parts:[{key:sg==='-'?'l_rm':'l_add',args:[objName(k,val)]}],sym:symFor(k,val,sg)});
+}
+function pushState(ex,s,entry){
+  entry.prev=clone(ex.st3);entry.state=clone(s);
+  ex.hist.push(clone(ex.st3));ex.st3=s;
+  ex.logArr.push(entry);ex.steps++;
+  clearFb(ex);
+  track('paso','—',entryText(entry,'es')+' ('+entry.sym+') → '+fmtInt(s),ex);
+  const sv=solvedVal(s),sn=solvedNeg(s);
+  if(sv!==null){
+    setFb(ex,'ok',()=>tr('solved'));
+    if(!ex.solvedLogged){ex.solvedLogged=true;track('resuelto','correcto','x = '+sv,ex);}
+  }else if(sn!==null){setFb(ex,'q',()=>tr('solved_neg'));}
+  renderLog(ex);draw(ex);
+}
+function undo(ex){
+  if(ex.locked||!ex.hist.length)return;
+  ex.st3=ex.hist.pop();ex.logArr.pop();clearFb(ex);
+  track('deshacer','—','',ex);renderLog(ex);draw(ex);
+}
+function resetSteps(ex){
+  if(ex.locked)return;
+  ex.st3=clone(ex.task);ex.hist=[];ex.logArr=[{parts:[{key:'l_init'}],state:clone(ex.task)}];
+  clearFb(ex);renderLog(ex);draw(ex);
+}
+function contText(v){
+  const f=n=>String(Math.round(n*1000)/1000);
+  if(!Number.isInteger(v))return tr('cont_frac',[f(v)]);
+  if(v>0)return tr('cont_pos',[{n:v,k:'u'}]);
+  if(v<0)return tr('cont_neg',[{n:-v,k:'g'}]);
+  return tr('cont_zero');
+}
+function verifyAns(ex){
+  if(ex.locked)return;
+  const raw0=ex.el.querySelector('.vin').value;
+  const raw=String(raw0).trim().replace(/[−–—]/g,'-').replace(',','.').replace(/^[A-Za-z]\s*=\s*/,'');
+  const v=Number(raw);
+  if(raw===''||!isFinite(v)){setFb(ex,'warn',()=>tr('v_num'),false,'v');return;}
+  const l=ex.task.L.x*v+ex.task.L.c,r=ex.task.R.x*v+ex.task.R.c;
+  const f=n=>String(Math.round(n*1000)/1000);
+  const txt=()=>tr('v_txt',[contText(v),f(l),f(r)]);
+  ex.answer=raw0;
+  const ok=Math.abs(l-r)<1e-9;
+  if(ok)setFb(ex,'ok',()=>'✔ '+txt()+tr('v_ok'),false,'v');
+  else setFb(ex,'bad',()=>'✘ '+txt()+tr('v_bad')+solHTML2(ex),true,'v');
+  track('verifica',ok?'correcto':'incorrecto','x = '+f(v),ex);
+  lockEx(ex,ok?'correcto':'incorrecto');
+}
+/* ----- modos 4 y 5: resolver escribiendo / atajo ----- */
+function renderWLog(ex){
+  const lg=ex.el&&ex.el.querySelector('.wlog');if(!lg)return;
+  lg.innerHTML=ex.wlines.map((l,i)=>
+    `<div class="step"><div class="stepE">${i+1}. ${mathHTML(fmtEqG(l))}</div>`+
+    (l.d?`<div class="linedesc">${tr(l.d.key,l.d.args)}</div>`:'')+`</div>`).join('');
+  lg.scrollTop=lg.scrollHeight;
+}
+function describeStep(prev,cur){
+  const nr=(a,b)=>Math.abs(a-b)<1e-7;
+  const dLx=cur.L.x-prev.L.x,dRx=cur.R.x-prev.R.x,dLc=cur.L.c-prev.L.c,dRc=cur.R.c-prev.R.c;
+  if(nr(dLx,dRx)&&nr(dLc,dRc)){
+    if(nr(dLx,0)&&nr(dLc,0))return{same:true};
+    if(dLx<=1e-9&&dLc<=1e-9)return{key:'esc_sub',args:[fmtSideG({x:-dLx,c:-dLc})]};
+    return{key:'esc_add',args:[fmtSideG({x:dLx,c:dLc})]};
+  }
+  const comps=[[prev.L.x,cur.L.x],[prev.L.c,cur.L.c],[prev.R.x,cur.R.x],[prev.R.c,cur.R.c]];
+  let f=null;
+  for(const c of comps){if(Math.abs(c[0])>1e-9){f=c[1]/c[0];break;}}
+  if(f!==null&&Math.abs(f)>1e-9&&comps.every(c=>Math.abs(c[1]-f*c[0])<1e-7)){
+    const inv=1/f;
+    if(Math.abs(f)>=1-1e-9)return{key:'esc_mul',args:[numSigned(f)]};
+    if(Math.abs(inv-Math.round(inv))<1e-9)return{key:'esc_div',args:[numSigned(Math.round(inv))]};
+    return{key:'esc_mul',args:[numSigned(f)]};
+  }
+  return{key:'esc_gen',args:[]};
+}
+function checkStep(ex){
+  if(ex.locked)return;
+  const inp=ex.el.querySelector('.wans'),raw=inp.value;
+  let e;
+  try{e=parseEq(raw);}
+  catch(err){const msg=err.message;setFb(ex,'bad',()=>msg);track('escribe','error de escritura',raw,ex);return;}
+  if(e.vars.size===0){setFb(ex,'bad',()=>tr('esc_novar'));track('escribe','sin letra',raw,ex);return;}
+  const prev=ex.wlines[ex.wlines.length-1];
+  const cur={L:{x:e.L.a,c:e.L.b},R:{x:e.R.a,c:e.R.b}};
+  const p=prev.L.x-prev.R.x,q=prev.R.c-prev.L.c,p2=cur.L.x-cur.R.x,q2=cur.R.c-cur.L.c;
+  if(Math.abs(p2)<1e-9){setFb(ex,'bad',()=>tr('esc_novar'));track('escribe','pierde la x',raw,ex);return;}
+  if(Math.abs(p2*q-q2*p)>1e-6){
+    const sameL=Math.abs(cur.L.x-prev.L.x)<1e-9&&Math.abs(cur.L.c-prev.L.c)<1e-9;
+    const sameR=Math.abs(cur.R.x-prev.R.x)<1e-9&&Math.abs(cur.R.c-prev.R.c)<1e-9;
+    const key=(sameL!==sameR)?'esc_one':'esc_bad';
+    setFb(ex,'bad',()=>tr(key));track('escribe','paso incorrecto',raw,ex);return;
+  }
+  const d=describeStep(prev,cur);
+  if(d.same){setFb(ex,'warn',()=>tr('esc_same'));return;}
+  if(ex.mode===5)d.key='sh_'+d.key.slice(4);
+  ex.wlines.push({L:cur.L,R:cur.R,d:{key:d.key,args:d.args}});
+  ex.steps++;ex.answer=raw;inp.value='';eqPreview(inp);
+  renderWLog(ex);
+  track('escribe','paso',fmtEqG(cur),ex);
+  const sv=solvedVal(cur),sn=solvedNeg(cur);
+  if(sv!==null){
+    const l=ex.task.L.x*sv+ex.task.L.c,r=ex.task.R.x*sv+ex.task.R.c;
+    setFb(ex,'ok',()=>tr('esc_fin',[numSigned(sv)])+' '+tr('esc_chk',[numAbs(l),numAbs(r)]));
+    ex.answer='x = '+sv;
+    track('escribe','correcto','x = '+sv,ex);
+    lockEx(ex,'correcto');
+  }else if(sn!==null){setFb(ex,'q',()=>tr('esc_neg'));}
+  else setFb(ex,'ok',()=>tr(d.key,d.args));
+}
+function undoStep(ex){
+  if(ex.locked||ex.wlines.length<2)return;
+  ex.wlines.pop();clearFb(ex);renderWLog(ex);
+}
+function resetWrite(ex){
+  if(ex.locked)return;
+  ex.wlines=[{L:clone(ex.task.L),R:clone(ex.task.R),d:null}];
+  const inp=ex.el.querySelector('.wans');if(inp){inp.value='';eqPreview(inp);}
+  clearFb(ex);renderWLog(ex);
+}
+/* ----- retos ----- */
+const RETOT={1:{x:15/0.7,int:22,prev:21},2:{x:14.53/0.51,int:29,prev:28}};
+function retoEl(n){return document.querySelector('.reto[data-r="'+n+'"]');}
+function initReto(n){
+  const el=retoEl(n),R=RETO[n];if(!el)return;
+  el.querySelector('.rq1').value=R.eq||'';
+  el.querySelector('.rq2').value=R.num||'';
+  el.querySelector('.rq3').value=R.txt||'';
+  showRFb(n,1);showRFb(n,2);showRSend(n);
+  el.querySelectorAll('button,input,textarea').forEach(b=>{b.disabled=!!R.sent;});
+}
+function showRFb(n,i){
+  const el=retoEl(n);if(!el)return;
+  const f=RETO[n]['fb'+i],box=el.querySelector('.rfb'+i);
+  if(!f){box.hidden=true;box.innerHTML='';return;}
+  box.className='fb rfb'+i+' '+f.cls;box.innerHTML=f.txt;box.hidden=false;
+}
+function setRFb(n,i,cls,txt){RETO[n]['fb'+i]={cls,txt};showRFb(n,i);}
+function modelHTML(n){return '<br><b>'+tr('ex_sol')+'</b> '+tr('r'+n+'_model');}
+function rChkEq(n){
+  const el=retoEl(n),R=RETO[n];
+  const raw=el.querySelector('.rq1').value;R.eq=raw;
+  let e;
+  try{e=parseEq(raw);}catch(err){setRFb(n,1,'bad',err.message);return;}
+  if(e.vars.size===0){setRFb(n,1,'bad',tr('rq_novar'));return;}
+  const p=e.L.a-e.R.a,q=e.R.b-e.L.b;
+  if(Math.abs(p)<1e-9){setRFb(n,1,'bad',tr('r'+n+'_bad'));track('reto'+n+' ecuación','incorrecto',raw,null);return;}
+  const xs=q/p,t=RETOT[n];
+  if(Math.abs(xs-t.x)<0.05){
+    R.ok1=true;setRFb(n,1,'ok',tr('rq_ok',[dec(xs)]));track('reto'+n+' ecuación','correcto',raw,null);
+  }else{setRFb(n,1,'bad',tr('r'+n+'_bad'));track('reto'+n+' ecuación','incorrecto',raw,null);}
+}
+function rChkNum(n){
+  const el=retoEl(n),R=RETO[n];
+  const raw=el.querySelector('.rq2').value;R.num=raw;
+  const v=Number(String(raw).trim().replace(',','.'));
+  if(raw.trim()===''||!isFinite(v)){setRFb(n,2,'warn',tr('v_num'));return;}
+  const t=RETOT[n];
+  if(v===t.int){R.ok2=true;setRFb(n,2,'ok',tr('rn_ok')+modelHTML(n));track('reto'+n+' número','correcto',raw,null);}
+  else if(Math.abs(v-t.x)<0.6&&!Number.isInteger(v)){setRFb(n,2,'warn',tr('rn_near',[dec(t.x)]));track('reto'+n+' número','punto exacto',raw,null);}
+  else if(v===t.prev){setRFb(n,2,'warn',tr('rn_prev'));track('reto'+n+' número','incorrecto',raw,null);}
+  else{setRFb(n,2,'bad',tr('rn_bad'));track('reto'+n+' número','incorrecto',raw,null);}
+}
+function showRSend(n){
+  const el=retoEl(n);if(!el)return;
+  const R=RETO[n],box=el.querySelector('.rsfb'),btn=el.querySelector('.sendr');
+  btn.disabled=!!R.sent;
+  if(!R.sfb){box.hidden=true;return;}
+  box.className='fb rsfb '+R.sfb.cls;box.textContent=tr(R.sfb.key,R.sfb.args);box.hidden=false;
+}
+function sendReto(n){
+  const R=RETO[n],el=retoEl(n);if(!R||R.sent)return;
+  R.txt=el.querySelector('.rq3').value;
+  if((!R.ok1||!R.ok2)&&!R.warned){R.warned=true;R.sfb={cls:'warn',key:'send_missing',args:[[!R.ok1?'1':'',!R.ok2?'2':''].filter(Boolean).join(', ')]};showRSend(n);return;}
+  track('reto'+n+' entrega',R.ok1&&R.ok2?'correcto':'parcial','eq: '+R.eq+' | n: '+R.num,null,R.txt);
+  R.sfb={cls:'q',key:'s_sending'};showRSend(n);
+  Promise.resolve(flush()).then(()=>{
+    if(!CONFIG.ENDPOINT||student.test){R.sent=true;R.sfb={cls:'warn',key:'send_practice'};}
+    else if(!queue.length&&syncState!=='rej'&&syncState!=='fail'){R.sent=true;R.sfb={cls:'ok',key:'send_ok'};}
+    else R.sfb={cls:'bad',key:'send_fail'};
+    showRSend(n);
+    if(R.sent)el.querySelectorAll('button,input,textarea').forEach(b=>{b.disabled=true;});
+  });
+}
+/* ----- entrega de pestañas de ejercicios ----- */
+function showSendFb(n){
+  const S=SEND[n],el=$('sfb'+n),pane=$('pane'+n);if(!el||!pane)return;
+  const btn=pane.querySelector('.send');
+  if(btn)btn.disabled=!!(S&&S.sent);
+  if(!S||!S.fb){el.hidden=true;return;}
+  el.className='fb '+S.fb.cls;el.textContent=tr(S.fb.key,S.fb.args);el.hidden=false;
+}
+function sendTab(n){
+  const S=SEND[n],arr=TAB[n];if(!S||!arr||S.sent)return;
+  const miss=[];arr.forEach((ex,i)=>{if(!ex.checked)miss.push(i+1);});
+  if(miss.length&&!S.warned){S.warned=true;S.fb={cls:'warn',key:'send_missing',args:[miss.join(', ')]};showSendFb(n);return;}
+  if(!S.rows){
+    S.rows=true;
+    arr.forEach(ex=>{ex.locked=true;track('entrega',ex.checked?ex.result:'sin responder',ex.answer,ex);refreshCard(ex);});
+  }
+  S.fb={cls:'q',key:'s_sending'};showSendFb(n);
+  Promise.resolve(flush()).then(()=>{
+    if(!CONFIG.ENDPOINT||student.test){S.sent=true;S.fb={cls:'warn',key:'send_practice'};}
+    else if(!queue.length&&syncState!=='rej'&&syncState!=='fail'){S.sent=true;S.fb={cls:'ok',key:'send_ok'};}
+    else S.fb={cls:'bad',key:'send_fail'};
+    showSendFb(n);
+  });
+}
+/* ----- notas del alumno, informe PDF y CSV ----- */
+function notesHTML(t){
+  const q=['a','b','c'].map(k=>`<label class="rq" style="margin:8px 0">${tr('nt_'+k)}<textarea class="nt" data-k="${k}" rows="3"></textarea></label>`).join('');
+  const ap=CONFIG.APUNTES?`<label class="chkrow"><input type="checkbox" id="repApuntes" checked> <span>${tr('nt_apu')}</span></label>`:'';
+  return `<div class="card">${head(t)}<div class="mission fb q" style="margin:0 0 4px">${tr('nt_intro')}</div>${q}${ap}
+  <div class="row"><button type="button" class="npdf">${tr('nt_pdf')}</button><button type="button" class="ncsv ghost">${tr('nt_csv')}</button><button type="button" class="nsend">${tr('nt_send')}</button></div>
+  <div class="fb nfb" hidden aria-live="polite"></div></div>`;
+}
+function initNotes(){document.querySelectorAll('.nt').forEach(t=>{t.value=NOTES[t.dataset.k]||'';});}
+function sendNotes(){
+  const fb=document.querySelector('.nfb');
+  const txt=['a','b','c'].map(k=>'['+k.toUpperCase()+'] '+(NOTES[k]||'').trim()).join('\n');
+  track('notas','—','',null,txt);
+  fb.className='fb q nfb';fb.textContent=tr('s_sending');fb.hidden=false;
+  Promise.resolve(flush()).then(()=>{
+    let cls='ok',key='send_ok';
+    if(!CONFIG.ENDPOINT||(student&&student.test)){cls='warn';key='send_practice';}
+    else if(queue.length||syncState==='rej'||syncState==='fail'){cls='bad';key='send_fail';}
+    fb.className='fb '+cls+' nfb';fb.textContent=tr(key);
+  });
+}
+function resTxt(ex){return ex.checked?tr('rep_'+({correcto:'c',equivalente:'e'}[ex.result]||'i')):tr('rep_p');}
+function repEx(ex,n){
+  const m=ex.mode,svg=ex.el&&ex.el.querySelector('svg.bal');
+  let h=`<section class="rep-ex"><h4>${tr('ex_n',[n])} · <span class="rep-res">${resTxt(ex)}</span></h4>`;
+  if(m<=3&&svg)h+=`<div class="rep-svg">${svg.outerHTML}</div>`;
+  if(m===1){
+    h+=`<p>${tr('rep_resp')} ${ex.answer?mathHTML(ex.answer):'—'}</p>`+(ex.checked?`<p>${tr('ex_sol')} ${mathHTML(fmtInt(ex.task))}</p>`:'');
+  }else if(m===2){
+    h+=`<p>${tr('rep_obj')} ${mathHTML(fmtInt(ex.task))}</p><p>${tr('rep_mine')} ${ex.answer?mathHTML(ex.answer):'—'}</p>`;
+  }else if(m===3){
+    h+=ex.logArr.map((l,i)=>i===0?`<div>0. ${entryText(l)}: ${fmtInt(l.state)}</div>`:
+      `<div>${i}. ${entryText(l)} <b>${l.split?'÷ '+l.split:l.sym}</b><br>${eqWithOp(l)} ⟹ ${eqChanged(l)}</div>`).join('');
+    if(ex.answer)h+=`<p>${tr('vf_pre')} <b>x = ${esc(String(ex.answer).replace(/^[A-Za-z]\s*=\s*/,''))}</b></p>`;
+  }else{
+    h+=`<p>${mathHTML(fmtEqG(ex.task))}</p>`+ex.wlines.map((l,i)=>
+      `<div>${i+1}. ${mathHTML(fmtEqG(l))} ${l.d?'<i>'+tr(l.d.key,l.d.args)+'</i>':''}</div>`).join('');
+  }
+  return h+'</section>';
+}
+function repReto(n){
+  const el=retoEl(n),R=RETO[n];if(!el)return'';
+  const eq=el.querySelector('.rq1').value,num=el.querySelector('.rq2').value,txt=el.querySelector('.rq3').value;
+  return `<section class="rep-ex"><h4>${tr('t_r'+n)} · ${tr('s_r'+n)}</h4>`+
+    `<p>${tr('rep_eq')} ${eq?mathHTML(eq):'—'} ${R.ok1?'✔':''}</p>`+
+    `<p>${tr('rep_n')} ${esc(num||'—')} ${R.ok2?'✔':''}</p>`+
+    `<p>${tr('rep_x')}<br>${esc(txt||'—').replace(/\n/g,'<br>')}</p></section>`;
+}
+function buildReport(){
+  let h=`<header class="rep-h"><h1>⚖️ ${tr('title')}</h1><p><b>${esc(student.nom)} ${esc(student.ap)}</b> · ${esc(student.grp)} · ${new Date().toLocaleDateString(L==='eu'?'eu-ES':'es-ES')}</p></header>`;
+  h+=repReto(1)+repReto(2);
+  [[3,'t1'],[4,'t2'],[5,'t3']].forEach(([id,k])=>{
+    const done=TAB[id].map((ex,i)=>({ex,i})).filter(o=>o.ex.checked||o.ex.steps>0);
+    h+=`<h2>${tr(k)} · ${tr('s'+k.slice(1))}</h2>`+(done.length?done.map(o=>repEx(o.ex,o.i+1)).join(''):`<p>${tr('rep_none')}</p>`);
+  });
+  const fx=TAB[8]&&TAB[8][0];
+  if(fx&&(fx.checked||fx.steps>0))h+=`<h2>${tr('t6')}</h2>`+repEx(fx,1);
+  h+=`<h2>${tr('t7')}</h2>`+['a','b','c'].map(k=>`<p><b>${tr('nt_'+k)}</b><br>${esc(NOTES[k]||'—').replace(/\n/g,'<br>')}</p>`).join('');
+  const ap=$('repApuntes');
+  if(CONFIG.APUNTES&&ap&&ap.checked)h+=`<h2 style="break-before:page">${tr('t4')}</h2>`+[1,2,3,4].map(n=>`<article class="wex">${PBHTML(n)}</article>`).join('')+
+    `<h2>${tr('t5')}</h2>`+[1,2,3,4].map(n=>`<article class="wex">${SHHTML(n)}</article>`).join('');
+  return h;
+}
+function printReport(){
+  $('report').innerHTML=buildReport();
+  const old=document.title;
+  document.title=('Balanzas_'+student.ap+'_'+student.nom+'_'+student.grp).replace(/[^\p{L}\p{N}_-]+/gu,'_');
+  const done=()=>{document.title=old;window.removeEventListener('afterprint',done);};
+  window.addEventListener('afterprint',done);
+  track('pdf','—','',null);
+  setTimeout(()=>window.print(),80);
+}
+function csvCell(v){v=String(v==null?'':v);return /[";\n\r]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v;}
+function downloadCSV(){
+  const txt='\ufeff'+[HEAD].concat(LOG).map(r=>r.map(csvCell).join(';')).join('\r\n');
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([txt],{type:'text/csv;charset=utf-8'}));
+  a.download=('balanzas_'+student.ap+'_'+student.nom+'.csv').replace(/\s+/g,'_');
+  document.body.appendChild(a);a.click();a.remove();
+  setTimeout(()=>URL.revokeObjectURL(a.href),2000);
+}
+/* ----- arrastrar y soltar ----- */
+function balRect(ex){return ex.el.querySelector('.bal').getBoundingClientRect();}
+function sideAt(ex,cx,cy){
+  const r=balRect(ex);
+  if(!r||!r.width||cx<r.left||cx>r.right||cy<r.top||cy>r.bottom)return null;
+  return(cx-r.left)<r.width/2?'L':'R';
+}
+function setZone(ex,side){
+  const both=(side==='B'),zl=ex.el.querySelector('.dzL'),zr=ex.el.querySelector('.dzR');
+  if(!zl||!zr)return;
+  zl.style.display=(both||side==='L')?'block':'none';
+  zr.style.display=(both||side==='R')?'block':'none';
+}
+function makeGhost(ex,k,val){
+  const sz=itemSize({k,val},1),d=document.createElement('div');
+  d.className='ghostobj';
+  d.innerHTML=`<svg viewBox="0 0 ${sz[0]} ${sz[1]}" width="${Math.round(sz[0]*1.4)}" height="${Math.round(sz[1]*1.4)}">`+itemMarkup({k,val},0,0,sz[0],sz[1],labelOf(ex),'')+'</svg>';
+  document.body.appendChild(d);
+  return d;
+}
+function moveGhosts(e){
+  if(!drag)return;
+  drag.ghost.style.left=e.clientX+'px';drag.ghost.style.top=e.clientY+'px';
+  if(drag.ghost2){
+    const r=balRect(drag.ex);
+    const inside=e.clientX>=r.left&&e.clientX<=r.right&&e.clientY>=r.top&&e.clientY<=r.bottom;
+    drag.ghost2.style.left=(2*(r.left+r.width/2)-e.clientX)+'px';
+    drag.ghost2.style.top=e.clientY+'px';
+    drag.ghost2.style.display=(drag.from||inside)?'block':'none';
+  }
+}
+function endDragListeners(){
+  window.removeEventListener('pointermove',onDragMove);
+  window.removeEventListener('pointerup',onDragUp);
+  window.removeEventListener('pointercancel',onDragCancel);
+  window.removeEventListener('keydown',onDragKey);
+  document.body.classList.remove('dragging');
+}
+function startDrag(e,ex,k,val,from){
+  if(drag||!student||ex.locked||(ex.mode!==2&&ex.mode!==3))return;
+  if(e.button!==undefined&&e.button!==0)return;
+  if(e.preventDefault)e.preventDefault();
+  try{if(e.target&&e.target.releasePointerCapture&&e.pointerId!==undefined)e.target.releasePointerCapture(e.pointerId);}catch(_){}
+  drag={ex,k,val:+val||1,from,sx:e.clientX,sy:e.clientY,started:false,ghost:null,ghost2:null};
+  window.addEventListener('pointermove',onDragMove);
+  window.addEventListener('pointerup',onDragUp);
+  window.addEventListener('pointercancel',onDragCancel);
+  window.addEventListener('keydown',onDragKey);
+}
+function onDragMove(e){
+  if(!drag)return;
+  const ex=drag.ex;
+  if(!drag.started){
+    if(Math.hypot(e.clientX-drag.sx,e.clientY-drag.sy)<5)return;
+    drag.started=true;drag.ghost=makeGhost(ex,drag.k,drag.val);
+    if(ex.mode===3)drag.ghost2=makeGhost(ex,drag.k,drag.val);
+    document.body.classList.add('dragging');
+    clearFb(ex);
+    if(ex.mode===2&&drag.from){tryRemove(ex.built[drag.from],drag.k,drag.val);render(ex);}
+    if(ex.mode===3&&drag.from){ex.dimK={k:drag.k,val:drag.val};draw(ex);}
+  }
+  moveGhosts(e);
+  const sd=sideAt(ex,e.clientX,e.clientY);
+  setZone(ex,ex.mode===3?(sd&&!drag.from?'B':null):sd);
+}
+function cleanDrag(d){
+  if(d.ghost)d.ghost.remove();if(d.ghost2)d.ghost2.remove();
+  setZone(d.ex,null);d.ex.dimK=null;
+}
+function onDragUp(e){
+  if(!drag)return;
+  const d=drag,ex=d.ex;drag=null;endDragListeners();
+  if(!d.started){
+    if(ex.mode===3)doOp(ex,d.k,d.val,d.from?'-':'+');
+    else if(d.from){tryRemove(ex.built[d.from],d.k,d.val);clearFb(ex);render(ex);}
+    else setFb(ex,'q',()=>tr('drag_hint'));
+    return;
+  }
+  cleanDrag(d);
+  const side=sideAt(ex,e.clientX,e.clientY);
+  if(ex.mode===3){
+    draw(ex);
+    if(d.from){if(!side)doOp(ex,d.k,d.val,'-');}
+    else if(side)doOp(ex,d.k,d.val,'+');
+    return;
+  }
+  if(side){
+    const r=tryAdd(ex.built[side],d.k,d.val);
+    if(!r.ok){if(d.from)tryAdd(ex.built[d.from],d.k,d.val);render(ex);setFb(ex,'warn',()=>tr(r.msg));return;}
+    clearFb(ex);render(ex);
+    if(r.note)setFb(ex,'q',()=>tr('note'));
+    return;
+  }
+  clearFb(ex);render(ex);
+}
+function onDragCancel(){
+  if(!drag)return;
+  const d=drag,ex=d.ex;drag=null;endDragListeners();
+  cleanDrag(d);
+  if(ex.mode===2&&d.started&&d.from)tryAdd(ex.built[d.from],d.k,d.val);
+  render(ex);
+}
+function onDragKey(e){if(e.key==='Escape')onDragCancel();}
+/* ----- eventos ----- */
+function exOf(node){const c=node&&node.closest?node.closest('.ex'):null;return c?EX[c.dataset.id]:null;}
+function retoOf(node){const c=node&&node.closest?node.closest('.reto'):null;return c?+c.dataset.r:null;}
+$('tabs').addEventListener('click',e=>{
+  const b=e.target.closest('button.tab');if(!b)return;
+  setTab(+b.id.split('_')[1]);
+});
+$('app').addEventListener('click',e=>{
+  const b=e.target.closest?e.target.closest('button'):null;if(!b)return;
+  if(b.classList.contains('npdf')){printReport();return;}
+  if(b.classList.contains('ncsv')){downloadCSV();return;}
+  if(b.classList.contains('nsend')){sendNotes();return;}
+  if(b.classList.contains('send')){sendTab(+b.dataset.tab);return;}
+  if(b.classList.contains('sendr')){sendReto(+b.dataset.r);return;}
+  if(b.classList.contains('rchk1')){rChkEq(retoOf(b));return;}
+  if(b.classList.contains('rchk2')){rChkNum(retoOf(b));return;}
+  if(b.classList.contains('fnew')){newFree();return;}
+  const ex=exOf(b);if(!ex)return;
+  if(b.classList.contains('chk'))(ex.mode===1?check1:check2)(ex);
+  else if(b.classList.contains('clr')){if(!ex.locked){ex.built={L:{x:0,c:0},R:{x:0,c:0}};clearFb(ex);render(ex);}}
+  else if(b.classList.contains('undo'))undo(ex);
+  else if(b.classList.contains('reset'))resetSteps(ex);
+  else if(b.classList.contains('vchk'))verifyAns(ex);
+  else if(b.classList.contains('wchk'))checkStep(ex);
+  else if(b.classList.contains('wundo'))undoStep(ex);
+  else if(b.classList.contains('wreset'))resetWrite(ex);
+});
+function eqPreview(inp){
+  const row=inp.closest('.row'),host=row&&(row.querySelector('.eqprev')||(row.nextElementSibling&&row.nextElementSibling.classList.contains('eqprev')?row.nextElementSibling:null));
+  if(host)host.innerHTML=inp.value.trim()?mathHTML(inp.value):'';
+}
+$('app').addEventListener('input',e=>{
+  const t=e.target;if(!t||!t.classList)return;
+  if(t.classList.contains('nt')){NOTES[t.dataset.k]=t.value;if(student&&!student.test)lsSet('bal_notes_'+student.id,JSON.stringify(NOTES));return;}
+  if(t.classList.contains('eqin'))eqPreview(t);
+  if(t.classList.contains('nsel')){
+    const ex=exOf(t);if(!ex)return;
+    const k=t.dataset.t,v=Math.max(1,Math.min(99,Math.round(+t.value||1)));
+    ex.W[k]=v;updateTok(ex,k);draw(ex);return;
+  }
+  if(t.classList.contains('rq3')){const n=retoOf(t);if(n)RETO[n].txt=t.value;}
+});
+$('app').addEventListener('change',e=>{
+  const t=e.target;if(!t||!t.classList)return;
+  if(t.classList.contains('fmode')){FREE.mode=+t.value||1;ssSet('bal_free',JSON.stringify(FREE));newFree();}
+  else if(t.classList.contains('flvl')){FREE.lvl=+t.value||1;ssSet('bal_free',JSON.stringify(FREE));newFree();}
+  else if(t.classList.contains('fsol')){FREE.sol=SOLS.indexOf(t.value)>=0?t.value:'mix';ssSet('bal_free',JSON.stringify(FREE));newFree();}
+});
+$('app').addEventListener('pointerdown',e=>{
+  const t=e.target;if(!t||!t.closest)return;
+  const ex=exOf(t);if(!ex)return;
+  if(t.classList&&t.classList.contains('nsel'))return;
+  const it=t.closest('.item');
+  if(it&&it.closest('.bal')){startDrag(e,ex,it.dataset.t,it.dataset.v,it.dataset.s);return;}
+  const tk=t.closest('.tok');
+  if(tk)startDrag(e,ex,tk.dataset.t,tk.dataset.v,null);
+});
+$('app').addEventListener('keydown',e=>{
+  const t=e.target;if(!t||!t.classList)return;
+  if(e.key==='Enter'&&(t.classList.contains('rq1')||t.classList.contains('rq2'))){
+    e.preventDefault();const n=retoOf(t);
+    if(t.classList.contains('rq1'))rChkEq(n);else rChkNum(n);
+    return;
+  }
+  const ex=exOf(t);if(!ex)return;
+  if(e.key==='Enter'){
+    if(t.classList.contains('ans'))check1(ex);
+    else if(t.classList.contains('vin'))verifyAns(ex);
+    else if(t.classList.contains('wans')){e.preventDefault();checkStep(ex);}
+  }
+  if(e.key==='Enter'&&t.classList.contains('nsel')){e.preventDefault();return;}
+  if((e.key==='Enter'||e.key===' ')&&t.classList.contains('tok')&&ex.mode===3&&!ex.locked){
+    e.preventDefault();doOp(ex,t.dataset.t,+t.dataset.v||1,'+');
+  }
+});
+$('lgForm').addEventListener('submit',doLogin);
+$('lgSkip').addEventListener('click',doSkip);
+$('logout').addEventListener('click',doLogout);
+$('goEs').addEventListener('click',()=>pickLang('es'));
+$('goEu').addEventListener('click',()=>pickLang('eu'));
+$('langBtn').addEventListener('click',()=>setLang(L==='es'?'eu':'es'));
+$('retry').addEventListener('click',()=>{syncState='idle';flush();});
+window.addEventListener('pagehide',()=>{
+  if(CONFIG.ENDPOINT&&queue.length&&typeof navigator!=='undefined'&&navigator.sendBeacon){
+    try{navigator.sendBeacon(CONFIG.ENDPOINT,new Blob([JSON.stringify({token:CONFIG.TOKEN,rows:queue.slice(0,50)})],{type:'text/plain;charset=UTF-8'}));}catch(e){}
+  }
+});
+/* ----- arranque ----- */
+L=(lsGet('bal_lang')==='eu')?'eu':'es';
+loadQueue();
+if(ssGet('bal_started')==='1')started=true;
+try{const s=JSON.parse(ssGet('bal_student')||'null');if(s&&s.mail&&s.ap&&s.nom&&s.grp){student=s;started=true;}}catch(e){}
+applyI18n();showApp();
+if(CONFIG.ENDPOINT&&queue.length){ensureTimer();flush();}
+</script>
+</body>
+</html>
